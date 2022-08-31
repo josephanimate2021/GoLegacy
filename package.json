@@ -1,7 +1,7 @@
 {
-	"name": "linuxanimate",
-	"version": "2.0.0",
-	"versionStr": "2.0.0",
+	"name": "golegacy",
+	"version": "0.0.1",
+	"versionStr": "0.0.1",
 	"scripts": {
 		"start": "node main.js"
 	},
