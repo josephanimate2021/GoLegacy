@@ -57,7 +57,6 @@ module.exports = function (req, res, url) {
 							case "localhost": 
 							case `localhost:${process.env.SERVER_PORT}`: {
 								loadPost(req, res).then(async ([data]) => {
-									console.log(data);
 									const ut = data.ut;
 									const aId = data.assetId || data.enc_asset_id;
 									asset.delete(ut, aId);
