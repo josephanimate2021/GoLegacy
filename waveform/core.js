@@ -12,7 +12,12 @@ const fs = require("fs");
 module.exports = function (req, res, url) {
 	if (req.method != "POST") return;
 	switch (url.pathname) {
-		case "/goapi/saveWaveform/": loadPost(req, res).then(([data]) => console.log(data));
-		case "/goapi/getWaveform/": loadPost(req, res).then(([data]) => res.end(fs.readFileSync(`${folder}/${data.ut}.${data.wfid}`)));
+		case "/goapi/saveWaveform/": loadPost(req, res).then(([data]) => res.end(fs.writeFileSync(`${folder}/${data.wfid.slice(0, -8)}.wf`, data.waveform)));
+		case "/goapi/getWaveform/": loadPost(req, res).then(([data]) => {
+			const wfFolder = `${folder}/${data.wfid.slice(0, -8)}.wf`;
+			if (fs.existsSync(wfFolder)) res.end(fs.readFileSync(wfFolder));
+			else res.end(fs.readFileSync(`${folder}/${data.wfid}`)));
+			return true;
+		});
 	}
 };
