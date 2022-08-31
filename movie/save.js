@@ -24,7 +24,12 @@ module.exports = function (req, res, url) {
 				}
 
 				var body = Buffer.from(data.body_zip, "base64");
-				movie.save(body, thumb, data.movieId).then((nId) => res.end("0" + nId)).catch(e => console.log("Error:", e));
+				if (trigAutosave) {
+					// prevent autosaves while the lvm is being developed.
+					if (process.env.NODE_ENV != "development") {
+						movie.save(body, thumb, data.movieId).then((nId) => res.end("0" + nId)).catch(e => console.log("Error:", e));
+					}
+				} else movie.save(body, thumb, data.movieId).then((nId) => res.end("0" + nId)).catch(e => console.log("Error:", e));
 				 
 			});
 			return true;
