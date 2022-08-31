@@ -25,13 +25,14 @@ module.exports = function (req, res, url) {
 		case "/goapi/getWaveform/": {
 			try {
 				loadPost(req, res).then(([data]) => {
+					const { ut, wfid: wfId, wftheme: theme } = data;
 					// if some waveforms are not fetched, then i currently have no fix for this at this moment.
-					const wfFolder = `${folder}/${data.ut}.${data.wfid}.wf`;
-					const wfMp3Folder = `${folder}/${data.ut}.${data.wfid}`;
+					const wfFolder = `${folder}/${ut}.${wfId}.wf`;
+					const wfMp3Folder = `${folder}/${ut}.${wfId}`;
 					if (fs.existsSync(wfFolder)) res.end(fs.readFileSync(wfFolder));
 					else if (fs.existsSync(wfMp3Folder)) res.end(fs.readFileSync(wfMp3Folder));
 					else {
-						get(`${store}/${data.wftheme}/sound/${data.wfid}`).then(v => {
+						get(`${store}/${theme}/sound/${wfId}`).then(v => {
 							res.end(v);
 						}).catch(e => {
 							console.log("Something went wrong while trying to get a waveform from the store url. so a random waveform will be generated instead.");
