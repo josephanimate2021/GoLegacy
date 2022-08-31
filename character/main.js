@@ -1,7 +1,7 @@
 const cachéFolder = process.env.CACHÉ_FOLDER;
 const xNumWidth = process.env.XML_NUM_WIDTH;
 const baseUrl = process.env.CHAR_BASE_URL;
-const folder = process.env.CHARS_FOLDER + "/databases";
+const charsFolder = process.env.CHARS_FOLDER, folder = charsFolder + "/databases";
 const fUtil = require("../misc/file");
 const util = require("../misc/util");
 const get = require("../misc/get");
@@ -24,14 +24,12 @@ function save(id, data, stockThumb = false) {
 	const suffix = id.substr(i + 1);
 	switch (prefix) {
 		case "c": {
-			if (!stockThumb) {
-				fs.writeFileSync(fUtil.getFileIndex("char-", ".xml", suffix), data);
-				fs.writeFileSync(`${folder}/name-${id}.txt`, charName);
-				fs.writeFileSync(`${folder}/copy-${id}.txt`, copyBase);
-			} else fs.writeFileSync(fUtil.getFileIndex("char-", ".png", suffix), data);
+			fs.writeFileSync(fUtil.getFileIndex("char-", ".xml", suffix), data);
+			fs.writeFileSync(`${folder}/name-${id}.txt`, charName);
+			fs.writeFileSync(`${folder}/copy-${id}.txt`, copyBase);
 			break;
 		}
-		case "C":
+		default: if (stockThumb) fs.writeFileSync(`${charsFolder}/${id}.png`, data);	
 	}
 	addTheme(id, data);
 	return id;
@@ -112,8 +110,6 @@ module.exports = {
 
 				case "":
 				default: {
-					// load the char thumb for the cc browser.
-					this.loadThumb(id).catch(e => rej(e));
 					// Blank prefix is left here for backwards-compatibility purposes.
 					var nId = Number.parseInt(suffix);
 					var xmlSubId = nId % fw;
@@ -203,9 +199,10 @@ module.exports = {
 	*/
 	saveStockThumb(data, assetId) {
 		return new Promise((rej) => {
-			fs.writeFileSync(`${folder}/../${assetId}.png`, data);
+			var id = assetId;
+			fs.writeFileSync(`${charsFolder}/${id}.png`, data);
 			// if the thumb failed to load the first time, try loading it again.
-			this.loadThumb(assetId).catch(e => rej(e));
+			this.loadThumb(id).catch(e => rej(e));
 		});
 	},
 	update(name, copyState, id, title, anwser) {
@@ -233,18 +230,14 @@ module.exports = {
 		return new Promise((res, rej) => {
 			const i = id.indexOf("-");
 			const prefix = id.substr(0, i);
-			if (prefix != "c") {
-				fs.readFileSync(`${folder}/../${id}.png`, (e) => {
-					if (e) rej(e);
-				});
-			} else {
+			if (prefix == "c") {
 				fs.readFile(getThumbPath(id), (e, b) => {
 					if (e) {
 						res(util.xmlFail(e));
 						rej(e);
 					} else res(b);
 				});
-			}		
+			} else res(fs.readFileSync(`${charsFolder}/${id}.png`));
 		});
 	},
 	meta(movieId) {
