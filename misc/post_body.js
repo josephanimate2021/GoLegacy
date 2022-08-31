@@ -21,7 +21,7 @@ module.exports = function (req, res) {
 
 		req.on("end", () => {
 			var dict = qs.parse(data);
-			var mId = dict.movieId || dict.presaveId;
+			var mId = dict.movieId;
 			resolve([dict, mId]);
 		});
 	});
