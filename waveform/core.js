@@ -17,7 +17,7 @@ module.exports = function (req, res, url) {
 			loadPost(req, res).then(([data]) => {
 				const wfFolder = `${folder}/${data.wfid.slice(0, -8)}.wf`;
 				if (fs.existsSync(wfFolder)) res.end(fs.readFileSync(wfFolder));
-				else res.end(fs.readFileSync(`${folder}/${data.wfId}`));
+				else res.end(fs.readFileSync(`${folder}/${data.wfid}`));
 			});
 			return true;
 		}
