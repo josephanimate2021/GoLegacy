@@ -212,12 +212,18 @@ module.exports = {
 	 * @returns {void}
 	 */
 	delete(ut, aId) {
+		const dot = aId.lastIndexOf(".");
+		const ext = aId.substr(dot + 1);
+		if (ext == "mp3") this.deleteWaveForm(ut, aId);
 		const stored = localCaché[ut];
 		if (!stored) return;
 		var path = `${cachéFolder}/${ut}.${aId}`;
 		size -= fs.statSync(path).size;
 		fs.unlinkSync(path);
 		delete localCaché[ut];
+	},
+	deleteWaveForm(ut, aId) {
+		fs.unlinkSync(`${cachéFolder}/${ut}.${aId}.wf`);
 	},
 	/**
 	 *

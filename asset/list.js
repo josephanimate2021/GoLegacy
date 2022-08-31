@@ -82,8 +82,6 @@ async function listAssets(data, makeZip) {
 		files.forEach((file) => {
 			switch (file.mode) {
 				case "bg":
-				case "movie": 
-				case "effect":
 				case "sound": {
 					const buffer = asset.load(data.ut, file.id);
 					fUtil.addToZip(zip, `${file.mode}/${file.id}`, buffer);
