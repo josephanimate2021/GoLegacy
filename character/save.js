@@ -23,7 +23,7 @@ module.exports = function (req, res, url) {
 		// apparently, my researching has told me that this script is ment for saving stock thumbs.
 		case "/goapi/saveCCThumbs/": 
 			loadPost(req, res).then(([data]) => {
-				var thumb = Buffer.from(data.imagedata, "base64");
+				var thumb = Buffer.from(data.thumbdata, "base64");
 				character.saveStockThumb(thumb, data.assetId);
 			});
 			return true;
