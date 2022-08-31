@@ -27,7 +27,7 @@ module.exports = function (req, res, url) {
 				const wfMp3Folder = `${folder}/${data.ut}.${data.wfid}`;
 				if (fs.existsSync(wfFolder)) res.end(fs.readFileSync(wfFolder));
 				else if (fs.existsSync(wfMp3Folder)) res.end(fs.readFileSync(wfMp3Folder));
-				else get(store + `/${data.wftheme}/sound/${data.wfid}`).then((v) => res.end(v));
+				else get(`${store}/${data.wftheme}/sound/${data.wfid}`).then((v) => res.end(v)).catch(e => console.log("Error:", e));
 			});
 			return true;
 		}
