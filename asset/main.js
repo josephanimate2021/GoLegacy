@@ -66,7 +66,8 @@ module.exports = {
 			}
 
 			return new Promise(function (resolve, reject) {
-				mp3Duration(`/${process.env.CACHÉ_FOLDER}/${ut}.${aId}`, (d) => {
+				const buffer = fs.readFileSync(`${process.env.CACHÉ_FOLDER}/${ut}.${aId}`);
+				mp3Duration(buffer, (d) => {
 					var dur = d * 1e3;
 					var dot = aId.lastIndexOf(".");
 					var dash = aId.lastIndexOf("-");
@@ -74,7 +75,7 @@ module.exports = {
 					var ext = aId.substr(dot + 1);
 					var subtype = aId.substr(dash + 1, dot - dash - 1);
 					if (!dur) ret.push({ id: aId, ext: ext, name: name, subtype: subtype});
-                    else ret.push({ id: aId, ext: ext, name: name, subtype: subtype, duration: dur });
+					else ret.push({ id: aId, ext: ext, name: name, subtype: subtype, duration: dur });
 				});
 				resolve(ret);
 				reject(ret)
