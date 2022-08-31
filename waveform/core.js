@@ -22,7 +22,6 @@ module.exports = function (req, res, url) {
 		}
 		case "/goapi/getWaveform/": {
 			loadPost(req, res).then(([data]) => {
-				if (!data.wftheme == "ugc") return;
 				const wfFolder = `${folder}/${data.ut}.${data.wfid}.wf`;
 				const wfMp3Folder = `${folder}/${data.ut}.${data.wfid}`;
 				if (fs.existsSync(wfFolder)) res.end(fs.readFileSync(wfFolder));
