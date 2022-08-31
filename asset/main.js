@@ -13,32 +13,29 @@ module.exports = {
 	},
 	save(buffer, ut, mode, ext) {
 		var suffix, ed;
-                switch (mode) { 
+		switch (mode) { 
 			case "prop": { 
 				suffix = `-${mode}.${ext}`;
 				return caché.newProp(buffer, ut, "", suffix); 
-                                break;
-                        }
+                break;
+            }
 			case "wtr": { 
 				suffix = `-${mode}.${ext}`;
 				return caché.newWatermark(buffer, ut, "", suffix, ext); 
-                                break;
-                        }
+				break;
+            }
 			case "video": { 
-                                suffix = `-${mode}.${ext}`;
-                                if (mode == "dontimport") {
-                                        console.log;
-                                } else {
-                                        return caché.newVideo(buffer, ut, "", suffix); 
-                                }
-                                break;
+                suffix = `-${mode}.${ext}`;
+                if (mode == "dontimport") console.log;
+				else return caché.newVideo(buffer, ut, "", suffix); 
+				break;
 			}
 			default: {
-                                suffix = `-${mode}.${ext}`;
-                                return caché.newItem(buffer, ut, "", suffix);
-                                break;
-                        }
-                }
+				suffix = `-${mode}.${ext}`;
+				return caché.newItem(buffer, ut, "", suffix);
+				break;
+            }
+		}
 	},
 	list(ut, mode) {
 		var ret = [];
@@ -62,42 +59,27 @@ module.exports = {
 					var fMode = 'sound';
 					var subtype = 'soundeffect';
 					break;
-				case 'tts':
-					var fMode = 'sound';
-					var subtype = 'tts';
-					break;
 			}
 			if (fMode == mode) {
-				if (fMode == 'sound') {
-					ret.push({ id: aId, ext: ext, name: name, mode: fMode, subtype: subtype});
-				} else {
-				ret.push({ id: aId, ext: ext, name: name, mode: fMode });
-				
+				if (fMode == 'sound') ret.push({ id: aId, ext: ext, name: name, mode: fMode, subtype: subtype});
+				else ret.push({ id: aId, ext: ext, name: name, mode: fMode });	
 			}
 
 			return new Promise(function (resolve, reject) {
-				console.log(`/${process.env.CACHÉ_FOLDER}/${ut}.${aId}`);
-				mp3Duration(`/${process.env.CACHÉ_FOLDER}/${ut}.${aId}`, (e, d) => {
+				mp3Duration(`/${process.env.CACHÉ_FOLDER}/${ut}.${aId}`, (d) => {
 					var dur = d * 1e3;
-					console.log(dur);
 					var dot = aId.lastIndexOf(".");
 					var dash = aId.lastIndexOf("-");
 					var name = aId.substr(0, dash);
 					var ext = aId.substr(dot + 1);
 					var subtype = aId.substr(dash + 1, dot - dash - 1);
-					console.log(subtype);
-                                        if (dur == '0' || 'undefined') {
-					        ret.push({ id: aId, ext: ext, name: name, subtype: subtype});
-                                        } else {
-                                                ret.push({ id: aId, ext: ext, name: name, subtype: subtype, duration: dur });
-                                        }
-					console.log(ret);
+					if (!dur) ret.push({ id: aId, ext: ext, name: name, subtype: subtype});
+                    else ret.push({ id: aId, ext: ext, name: name, subtype: subtype, duration: dur });
 				});
 				resolve(ret);
 				reject(ret)
 			});
-		}
-	});
+		});
 		return ret;
 	},
 	listAll(ut) {

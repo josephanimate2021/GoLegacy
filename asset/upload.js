@@ -17,6 +17,7 @@ module.exports = function (req, res, url) {
 			try {
 				formidable().parse(req, (_, fields, files) => {
 					var [mId, mode, ext] = fields.params.split(".");
+					const ut = mId;
 					switch (mode) {
 						case "vo": mode = "voiceover";
 						case "se": mode = "soundeffect";
@@ -25,7 +26,8 @@ module.exports = function (req, res, url) {
 
 					var path = files.import.path;
 					var buffer = fs.readFileSync(path);
-					asset.save(buffer, mId, mode, ext);
+					console.log(ut);
+					asset.save(buffer, ut, mode, ext);
 					fs.unlinkSync(path);
 					delete buffer;
 					res.end();

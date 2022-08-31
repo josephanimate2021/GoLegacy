@@ -145,7 +145,7 @@ module.exports = function (req, res, url) {
 				},
 				allowScriptAccess: "always",
 			};
-			html = `<iframe style='display:none'name='dummy'></iframe><form style='display:none'id='uploadbanner'enctype='multipart/form-data'method='post'action='/upload_asset'target='dummy'><input type='text'name='params'/><input id='fileupload'name='import'type='file'onchange='importComplete(this)'accept='.mp3,.wav,.png,.jpg,.swf'/><input type='submit'value='submit'id='submit'/></form><script>interactiveTutorial={neverDisplay:function(){return ${tutorialReload ? false : true}}};function studioLoaded(arg){console.log(arg)}function initPreviewPlayer(xml){confirm('Before proceeding, please make sure all your changes have been saved.')&&window.open('player?movieId='+flashvars.presaveId,'MsgWindow','width=1280,height=723,left='+(screen.width/2-640)+',top='+(screen.height/2-360))};function exitStudio(){window.location='/'}const fu=document.getElementById('fileupload'),sub=document.getElementById('submit');function showImporter(){fu.click()};function importComplete(obj){const file=obj.files[0];if(file!=undefined){const ext=file.name.substring(file.name.lastIndexOf('.')+1);var params=flashvars.presaveId+'.';if(ext=='mp3'||ext=='wav'){var c;while(c!='vo'&&c!='se'&&c!='mu'){c=prompt('Would you like to upload this as a voiceover (\"vo\"), sound effect (\"se\"), or as music (\"mu\")?').toLowerCase()}params+=c}else if(ext=='jpg'||ext=='png'||ext=='swf'){var c;while(c!='bg'&&c!='prop'&&c!='wtr'){c=prompt('Would you like to upload this as a background (\"bg\"), as a prop (\"prop\"), or as a watermark (\"wtr\")?').toLowerCase()}params+=c}obj.parentElement.firstChild.value=params+'.'+ext;sub.click();return true}}</script>`;
+			html = `<iframe style='display:none'name='dummy'></iframe><form style='display:none'id='uploadbanner'enctype='multipart/form-data'method='post'action='/upload_asset'target='dummy'><input type='text'name='params'/><input id='fileupload'name='import'type='file'onchange='importComplete(this)'accept='.mp3,.wav,.png,.jpg,.swf'/><input type='submit'value='submit'id='submit'/></form><script>interactiveTutorial={neverDisplay:function(){return ${tutorialReload ? false : true}}};function studioLoaded(arg){console.log(arg)}function initPreviewPlayer(xml){confirm('Before proceeding, please make sure all your changes have been saved.')&&window.open('player?movieId='+flashvars.movieId,'MsgWindow','width=1280,height=723,left='+(screen.width/2-640)+',top='+(screen.height/2-360))};function exitStudio(){window.location='/'}const fu=document.getElementById('fileupload'),sub=document.getElementById('submit');function showImporter(){fu.click()};function importComplete(obj){const file=obj.files[0];if(file!=undefined){const ext=file.name.substring(file.name.lastIndexOf('.')+1);var params=flashvars.ut+'.';if(ext=='mp3'||ext=='wav'){var c;while(c!='vo'&&c!='se'&&c!='mu'){c=prompt('Would you like to upload this as a voiceover (\"vo\"), sound effect (\"se\"), or as music (\"mu\")?').toLowerCase()}params+=c}else if(ext=='jpg'||ext=='png'||ext=='swf'){var c;while(c!='bg'&&c!='prop'&&c!='wtr'){c=prompt('Would you like to upload this as a background (\"bg\"), as a prop (\"prop\"), or as a watermark (\"wtr\")?').toLowerCase()}params+=c}obj.parentElement.firstChild.value=params+'.'+ext;sub.click();return true}}</script>`;
 			break;
 		}
 
@@ -177,9 +177,10 @@ module.exports = function (req, res, url) {
 	}
 	res.setHeader("Content-Type", "text/html; charset=UTF-8");
 	Object.assign(params.flashvars, query);
-	res.end(`<script>document.title='${title}',flashvars=${
+	res.end(`<script>document.title='${title}';
+	const flashvars = ${
 		// json flashvars
-		JSON.stringify(params.flashvars)}</script><body style="margin:0px">${
+		JSON.stringify(params.flashvars)};</script><body style="margin:0px">${
 		// object flashvars
 		toObjectString(attrs, params)}</body>${html || ""}`);
 	return true;
