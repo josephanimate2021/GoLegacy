@@ -10,7 +10,6 @@ const fs = require("fs");
  * @returns {boolean}
  */
 module.exports = function (req, res, url) {
-	var wId;
 	if (req.method != "POST") return;
 	switch (url.pathname) {
 		case "/goapi/saveWaveform/": loadPost(req, res).then(([data]) => res.end(fs.writeFileSync(`${folder}/${data.wfid}`)));
