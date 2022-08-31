@@ -6,12 +6,5 @@ const https = require("https");
  */
 module.exports = function (url, options = {}) {
 	var data = [];
-	return new Promise((res, rej) => {
-		https.get(url, options, (o) =>
-			o
-				.on("data", (v) => data.push(v))
-				.on("end", () => res(Buffer.concat(data)))
-				.on("error", rej)
-		);
-	});
+	return new Promise((res, rej) => https.get(url, options, (o) => o.on("data", (v) => data.push(v)).on("end", () => res(Buffer.concat(data))).on("error", rej)));
 };
