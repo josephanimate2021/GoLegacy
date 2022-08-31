@@ -3918,5 +3918,26 @@
 	<prop id="bar_light_02.swf" name="" holdable="0" placeable="1" wearable="0" facing="left" thumb="" enable="Y" is_premium="N" aid="9806" money="0" sharing="0"/>
 	<prop id="bar_stool.swf" name="" holdable="0" placeable="1" wearable="0" facing="left" thumb="" enable="Y" is_premium="N" aid="9807" money="0" sharing="0"/>
 	<prop id="living_room_sofa.swf" name="Sofa" holdable="0" placeable="1" wearable="0" facing="left" thumb="" enable="Y" is_premium="N" aid="9797" money="0" sharing="0"/>
+        <char id="53773026" enc_asset_id="0c_RaVgezVcM" name="Diesel Busters" cc_theme_id="family" thumbnail_url="char-default.png" copyable="Y">
+		<tags>family,_free,_cat:Stock characters</tags>
+	</char>
+	<char id="1293816" enc_asset_id="0D0cXZKScXEM" name="Macusoper Busters" cc_theme_id="family" thumbnail_url="char-default.png" copyable="Y">
+		<tags>family,_free,_cat:Stock characters</tags>
+	</char>
+	<char id="53767560" enc_asset_id="0RPXnavoCPWc" name="Woman" cc_theme_id="family" thumbnail_url="char-default.png" copyable="Y">
+		<tags>family,_free,_cat:Stock characters</tags>
+	</char>
+	<char id="874292" enc_asset_id="0eL2wz-6D1oI" name="A. Mahmoud" cc_theme_id="family" thumbnail_url="char-default.png" copyable="Y">
+		<tags>family,_free,_cat:Stock characters</tags>
+	</char>
+	<char id="874645" enc_asset_id="0daUysWb0bG0" name="A. Michael" cc_theme_id="family" thumbnail_url="char-default.png" copyable="Y">
+		<tags>family,_free,_cat:Stock characters</tags>
+	</char>
+	<char id="832231" enc_asset_id="0UzH1iQbJYY8" name="A. Michael" cc_theme_id="family" thumbnail_url="char-default.png" copyable="Y">
+		<tags>family,_free,_cat:Stock characters</tags>
+	</char>
+	<char id="834785" enc_asset_id="0x-YbzIlZCkY" name="B. George" cc_theme_id="family" thumbnail_url="char-default.png" copyable="Y">
+		<tags>family,_free,_cat:Stock characters</tags>
+	</char>
 </theme>
 <!--If you see this, Blukas/GoTube says hi and you should give him credit if you modify this ;)-->
