@@ -40,7 +40,6 @@ module.exports = {
 		});
 	},
 	update(id, title, tags) {
-		if (!fs.existsSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`)) return;
 		const db = require('.' + process.env.DATABASES_FOLDER + `/starter-${id}.json`);
 		let meta = {
 			title: title,

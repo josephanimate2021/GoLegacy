@@ -41,7 +41,9 @@ module.exports = function (req, res, url) {
 			});
 			return true;
 		} case "/goapi/updateSysTemplateAttributes/": {
-			loadPost(req, res).then(([data]) => starter.update(data.id || data.movieId, data.title, data.tags));
+			loadPost(req, res).then(([data]) => {
+				starter.update(data.id || data.movieId, data.title, data.tags);
+			});
 			return true;
 		}
 	}
