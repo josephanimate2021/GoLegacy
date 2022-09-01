@@ -14,27 +14,29 @@ module.exports = {
 	 * @param {string} oldId
 	 * @returns {Promise<string>}
 	 */
-	save(starterZip, thumb) {
+	save(starterZip, thumb,  mId = false) {
 		return new Promise(async (res, rej) => {
 			var zip = nodezip.unzip(starterZip);
-			const mId = fUtil.generateId();
-			const thumbFile = `${folder}/${mId}.png`
+			var id;
+			if (!mId) id = fUtil.generateId();
+			else id = mId;
+			const thumbFile = `${folder}/${id}.png`
 			if (thumb) fs.writeFileSync(thumbFile, thumb);
-			var path = `${folder}/${mId}.xml`
+			var path = `${folder}/${id}.xml`
 			var writeStream = fs.createWriteStream(path);
 			parse.unpackMovie(zip, thumb).then((data) => {
 				writeStream.write(data, () => {
 					writeStream.close();
-					this.meta(mId).then(mMeta => {
+					this.meta(id).then(mMeta => {
 						// save the title & tags to get modifed by the user later.
 						let jMeta = {
 							title: mMeta.title,
 							sceneCount: mMeta.sceneCount,
 							tags: mMeta.tag
 						};
-						fs.writeFileSync(`${process.env.DATABASES_FOLDER}/starter-${mId}.json`, JSON.stringify(jMeta));
+						fs.writeFileSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`, JSON.stringify(jMeta));
 					});
-					res(mId);
+					res(id);
 				});
 			}).catch(e => rej(e));
 		});
