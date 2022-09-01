@@ -29,6 +29,7 @@ module.exports = {
 						// save the title & tags to get modifed by the user later.
 						let jMeta = {
 							title: mMeta.title,
+							sceneCount: mMeta.sceneCount,
 							tags: mMeta.tag
 						};
 						fs.writeFileSync(`${process.env.DATABASES_FOLDER}/starter-${mId}.json`, JSON.stringify(jMeta));
@@ -102,12 +103,20 @@ module.exports = {
 			const begTag = buffer.indexOf("<tag>") + 14;
 			const endTag = buffer.indexOf("]]></tag>");
 			const tag = buffer.slice(begTag, endTag).toString();
+			
+			let count = 0;
+			let index = 0;
+			while (buffer.indexOf('<scene id=', index) > -1) {
+				count++;
+				index += buffer.indexOf('<scene id=', index);
+			}
 
 			res({
 				date: fs.statSync(filepath).mtime,
 				title: title,
 				tag: tag,
 				id: movieId,
+				sceneCount: count
 			});
 		});	 
 	},
