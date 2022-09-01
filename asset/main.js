@@ -2,6 +2,7 @@ var mp3Duration = require("mp3-duration");
 const chars = require("../character/main");
 const fUtil = require("../misc/file");
 const caché = require("./caché");
+<<<<<<< HEAD
 const fs = require("fs");
 
 function fetchMusicDurationsForId(ut, aId) {
@@ -12,6 +13,8 @@ function fetchMusicDurationsForId(ut, aId) {
 	});
 	return dur;
 }
+=======
+>>>>>>> c05b2bb3b4572a02cc1c074af08735f86cd5b34a
 
 module.exports = {
 
@@ -82,11 +85,44 @@ module.exports = {
 			const dur = fetchMusicDurationsForId(ut, aId).vidDur;
 			console.log(dur);
 			if (fMode == mode) {
+<<<<<<< HEAD
 				if (fMode == 'sound') ret.push({ id: aId, ext: ext, name: name, duration: dur, subtype: subtype});
 				else ret.push({ id: aId, ext: ext, name: name, subtype: subtype });	
 			}
 		});
 		console.log(ret);
+=======
+				if (fMode == 'sound') {
+					ret.push({ id: aId, ext: ext, name: name, mode: fMode, subtype: subtype});
+				} else {
+				ret.push({ id: aId, ext: ext, name: name, mode: fMode });
+				
+			}
+
+			return new Promise(function (resolve, reject) {
+				console.log(`/${process.env.CACHÉ_FOLDER}/${ut}.${aId}`);
+				mp3Duration(`/${process.env.CACHÉ_FOLDER}/${ut}.${aId}`, (e, d) => {
+					var dur = d * 1e3;
+					console.log(dur);
+					var dot = aId.lastIndexOf(".");
+					var dash = aId.lastIndexOf("-");
+					var name = aId.substr(0, dash);
+					var ext = aId.substr(dot + 1);
+					var subtype = aId.substr(dash + 1, dot - dash - 1);
+					console.log(subtype);
+                                        if (dur == '0' || 'undefined') {
+					        ret.push({ id: aId, ext: ext, name: name, subtype: subtype});
+                                        } else {
+                                                ret.push({ id: aId, ext: ext, name: name, subtype: subtype, duration: dur });
+                                        }
+					console.log(ret);
+				});
+				resolve(ret);
+				reject(ret)
+			});
+		}
+	});
+>>>>>>> c05b2bb3b4572a02cc1c074af08735f86cd5b34a
 		return ret;
 	},
 	listAll(ut) {
