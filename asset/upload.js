@@ -70,10 +70,9 @@ module.exports = function (req, res, url) {
 					const buf = Buffer.concat(buffers);
 					mp3Duration(buf, (e, duration) => {
 						if (e || !duration) return;
-						const dur = 1e3 * duration;
 						meta.duration = 1e3 * duration;
 						const aId = asset.save(buf, data.ut, meta.subtype, meta.ext);
-						database.save(dur, aId);
+						fs.writeFileSync(`${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`, JSON.stringify(meta));
 						res.end(
 							`0<response><asset><id>${aId}</id><enc_asset_id>${aId}</enc_asset_id><type>sound</type><subtype>${meta.subtype}</subtype><title>${meta.title}</title><published>0</published><tags></tags><duration>${meta.duration}</duration><downloadtype>progressive</downloadtype><file>${aId}</file></asset></response>`
 						);

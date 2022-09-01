@@ -52,18 +52,15 @@ module.exports = {
 		var ret = [];
 		var files = caché.list(ut);
 		files.forEach((aId) => {
+			const meta = require('.' + `${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`);
 			var dot = aId.lastIndexOf(".");
 			var dash = aId.lastIndexOf("-");
-			var name = aId.substr(0, dash);
 			var ext = aId.substr(dot + 1);
 			var fMode = aId.substr(dash + 1, dot - dash - 1);
-			var subtype = aId.substr(dash + 1, dot - dash - 1);
+			const name = meta.title || aId.substr(0, dash);
+			const subtype = meta.subtype || fMode;
 			switch (fMode) {	
-				case 'music': {
-					var fMode = 'sound';
-					var subtype = 'bgmusic';
-					break;
-				}
+				case 'music':
 				case 'voiceover':
 				case 'soundeffect': {
 					var fMode = 'sound';
@@ -71,8 +68,8 @@ module.exports = {
 				}
 			}
 			if (fMode == mode) {
+				const dur = meta.duration;
 				if (fMode == 'sound') {
-					const dur = database.load(aId);
 					ret.push({ id: aId, ext: ext, name: name, duration: dur, subtype: subtype});
 					console.log(ret);
 				} else {
