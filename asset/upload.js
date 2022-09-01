@@ -25,19 +25,30 @@ module.exports = function (req, res, url) {
 				formidable().parse(req, (_, fields, files) => {
 					var [mId, mode, ext] = fields.params.split(".");
 					const ut = mId;
+					var subtype;
 					switch (mode) {
-						case "vo": mode = "voiceover";
-						case "se": mode = "soundeffect";
-						case "mu": mode = "music";
+						case "vo": subtype = "voiceover";
+						case "se": subtype = "soundeffect";
+						case "mu": subtype = "bgmusic";
+						default: subtype = 0;
 					}
 
 					var path = files.import.path;
-					var buffer = fs.readFileSync(path);
-					console.log(ut);
-					asset.save(buffer, ut, mode, ext);
-					fs.unlinkSync(path);
-					delete buffer;
-					res.end();
+					if (ext == "mp3") {
+						mp3Duration(path, (e, dur) => {
+							var buffer = fs.readFileSync(path);
+							asset.save(buffer, ut, mode, ext, dur, subtype);
+							fs.unlinkSync(path);
+							delete buffer;
+							res.end();
+						});
+					} else {
+						var buffer = fs.readFileSync(path);
+						asset.save(buffer, ut, mode, ext, subtype);
+						fs.unlinkSync(path);
+						delete buffer;
+						res.end();
+					}
 				});
 			} catch (e) {
 				console.log("Error:", e);
