@@ -19,7 +19,7 @@ module.exports = {
 			caché.newStream(bytes, ut, "", suffix).then(aId => res(aId)).catch(e => rej(e));
 		});
 	},
-	save(buffer, ut, mode, ext) {
+	save(buffer, ut, mode, ext, dur = false, subtype) {
 		var suffix;
                 switch (mode) { 
 			case "prop": { 
@@ -42,8 +42,12 @@ module.exports = {
                                 break;
 			}
 			default: {
-                                suffix = `-${mode}.${ext}`;
-                                return caché.newItem(buffer, ut, "", suffix);
+				if (!dur) {
+					suffix = `-${mode}.${ext}`;
+					return caché.newItem(buffer, ut, "", suffix, subtype);
+				} else {
+					suffix = `-${mode}.${ext}`;
+					return caché.newItem(buffer, ut, "", suffix, subtype, dur);
                                 break;
                         }
                 }
