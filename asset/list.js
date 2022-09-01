@@ -13,7 +13,7 @@ function giveXml(type, v) {
 	switch (type) {
 		case "movie": {
 			meta = require('.' + process.env.DATABASES_FOLDER + `/starter-${v.id}.json`);
-			xml = `<movie id="${v.id}" enc_asset_id="${v.id}" path="/_SAVED/${v.id}" numScene="${meta.sceneCount || "1"}" title="${meta.title}" thumbnail="/starter_thumbs/${v.id}"><tags>${meta.tags || ""}</tags></movie>`;
+			xml = `<movie id="${v.id}" enc_asset_id="${v.id}" path="/_SAVED/${v.id}" numScene="${meta.sceneCount || "1"}" title="${meta.title || "Untitled"}" thumbnail="/starter_thumbs/${v.id}"><tags>${meta.tags || ""}</tags></movie>`;
 			break;
 		}
 	}
