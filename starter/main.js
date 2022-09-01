@@ -14,7 +14,7 @@ module.exports = {
 	 * @param {string} oldId
 	 * @returns {Promise<string>}
 	 */
-	save(starterZip, thumb,  mId = false) {
+	save(starterZip, thumb, mId = false) {
 		return new Promise(async (res, rej) => {
 			var zip = nodezip.unzip(starterZip);
 			var id;
