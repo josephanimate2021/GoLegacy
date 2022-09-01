@@ -39,6 +39,7 @@ module.exports = function (req, res, url) {
 			return true;
 		case "/goapi/saveSound/": {
 			loadPost(req, res).then(([data]) => {
+				console.log(data);
 				const ut = data.ut;
 				const bytes = Buffer.from(data.bytes, "base64");
 				const subtype = data.subtype;
