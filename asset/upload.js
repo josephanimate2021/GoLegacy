@@ -27,31 +27,17 @@ module.exports = function (req, res, url) {
 					const ut = mId;
 					var subtype;
 					switch (mode) {
-						case "vo": subtype = "voiceover";
-						case "se": subtype = "soundeffect";
-						case "mu": {
-							subtype = "bgmusic";
-							mode = "music";
-						}
-						default: subtype = 0;
+						case "vo": mode = "voiceover";
+						case "se": mode = "soundeffect";
+						case "mu": mode = "music";
 					}
 
 					var path = files.import.path;
-					if (ext == "mp3") {
-						mp3Duration(path, (e, dur) => {
-							var buffer = fs.readFileSync(path);
-							asset.save(buffer, ut, mode, ext, dur, subtype);
-							fs.unlinkSync(path);
-							delete buffer;
-							res.end();
-						});
-					} else {
-						var buffer = fs.readFileSync(path);
-						asset.save(buffer, ut, mode, ext, subtype);
-						fs.unlinkSync(path);
-						delete buffer;
-						res.end();
-					}
+					var buffer = fs.readFileSync(path);
+					asset.save(buffer, ut, mode, ext);
+					fs.unlinkSync(path);
+					delete buffer;
+					res.end();
 				});
 			} catch (e) {
 				console.log("Error:", e);
