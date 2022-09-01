@@ -25,6 +25,14 @@ module.exports = {
 			parse.unpackMovie(zip, thumb).then((data) => {
 				writeStream.write(data, () => {
 					writeStream.close();
+					this.meta(mId).then(mMeta => {
+						// save the title & tags to get modifed by the user later.
+						let jMeta = {
+							title: mMeta.title,
+							tags: mMeta.tag
+						};
+						fs.writeFileSync(`${process.env.DATABASES_FOLDER}/starter-${mId}.json`, JSON.stringify(jMeta));
+					});
 					res(mId);
 				});
 			}).catch(e => rej(e));
@@ -41,6 +49,9 @@ module.exports = {
 	},
 	delete(mId) {
 		return new Promise((rej) => {
+			if (fs.existsSync(`${process.env.DATABASES_FOLDER}/starter-${mId}.json`)) {
+				fs.unlinkSync(`${process.env.DATABASES_FOLDER}/starter-${mId}.json`);
+			}
 			var filePath = `${folder}/${mId}.xml`;
 			if (!fs.existsSync(filePath)) rej(`The File: ${filePath} Is Non Existant.`);
 			fs.unlinkSync(filePath);
@@ -73,29 +84,31 @@ module.exports = {
 		return table;
 	},
 	meta(movieId) {
-		const filepath = `${folder}/${movieId}.xml`;
-		const buffer = fs.readFileSync(filepath);
+		return new Promise((res, rej) => {
+			const filepath = `${folder}/${movieId}.xml`;
+			const buffer = fs.readFileSync(filepath);
 
-		const begTitle = buffer.indexOf("<title>") + 16;
-		const endTitle = buffer.indexOf("]]></title>");
-		const subtitle = buffer.slice(begTitle, endTitle).toString().trim();
+			const begTitle = buffer.indexOf("<title>") + 16;
+			const endTitle = buffer.indexOf("]]></title>");
+			const subtitle = buffer.slice(begTitle, endTitle).toString().trim();
 			
-		const begTag = buffer.indexOf("<tag>") + 14;
-		const endTag = buffer.indexOf("]]></tag>");
-		const subtag = buffer.slice(begTag, endTag).toString();
-		var title, tag;
+			const begTag = buffer.indexOf("<tag>") + 14;
+			const endTag = buffer.indexOf("]]></tag>");
+			const subtag = buffer.slice(begTag, endTag).toString();
+			var title, tag;
 			
-		if (!subtitle) title = "Untitled Starter";
-		else title = subtitle;
+			if (!subtitle) title = "Untitled Starter";
+			else title = subtitle;
 			
-		if (!subtag) tag = "none";
-		else tag = subtag;
+			if (!subtag) tag = "none";
+			else tag = subtag;
 
-		return {
-			date: fs.statSync(filepath).mtime,
-			title: title,
-			tag: tag,
-			id: movieId,
-		};
+			res({
+				date: fs.statSync(filepath).mtime,
+				title: title,
+				tag: tag,
+				id: movieId,
+			});
+		});	 
 	},
 };
