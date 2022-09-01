@@ -223,7 +223,7 @@ module.exports = {
 	delete(ut, aId) {
 		const dot = aId.lastIndexOf(".");
 		const ext = aId.substr(dot + 1);
-		if (ext == "mp3") this.deleteWaveForm(ut, aId);
+		if (ext == "mp3" && fs.existsSync(`${cachéFolder}/${ut}.${aId}.wf`)) this.deleteWaveForm(ut, aId);
 		const stored = localCaché[ut];
 		if (!stored) return;
 		var path = `${cachéFolder}/${ut}.${aId}`;
