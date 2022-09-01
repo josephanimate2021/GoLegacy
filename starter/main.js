@@ -105,10 +105,10 @@ module.exports = {
 			const tag = buffer.slice(begTag, endTag).toString();
 			
 			let count = 0;
-			let index = 0;
-			while (buffer.indexOf('<scene id=', index) > -1) {
+			let pos = buffer.indexOf('<scene id=');
+			while (pos > -1) {
 				count++;
-				index += buffer.indexOf('<scene id=', index);
+				pos = buffer.indexOf('<scene id=', pos + 10);
 			}
 
 			res({
