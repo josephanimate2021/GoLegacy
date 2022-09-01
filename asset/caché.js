@@ -157,9 +157,9 @@ module.exports = {
 			subtype: aId.substr(dash + 1, dot - dash - 1),
 			title: aId.substr(0, dash),
 			ext: aId.substr(dot + 1),
-			themeId: "ugc"
+			themeId: "ugc",
+			duration: dur
 		};
-		if (dur) meta.duration = dur;
 		fs.writeFileSync(`${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`, JSON.stringify(meta));
 		this.save(ut, aId, buffer);
 		return aId;
