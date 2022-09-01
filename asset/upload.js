@@ -29,7 +29,10 @@ module.exports = function (req, res, url) {
 					switch (mode) {
 						case "vo": subtype = "voiceover";
 						case "se": subtype = "soundeffect";
-						case "mu": subtype = "bgmusic";
+						case "mu": {
+							subtype = "bgmusic";
+							mode = "music";
+						}
 						default: subtype = 0;
 					}
 
