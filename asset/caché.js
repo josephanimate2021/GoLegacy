@@ -152,6 +152,15 @@ module.exports = {
 		this.save(ut, aId, buffer);
 		return aId;
 	},
+	newStream(bytes, ut, prefix = "", suffix = "") {
+		return new Promise((res) => {
+			localCaché[ut] = localCaché[ut] || [];
+			var stored = localCaché[ut];
+			var aId = this.generateId(prefix, suffix, stored);
+			this.save(ut, aId, bytes);
+			res(aId);
+		});
+	},
 	/**
 	 *
 	 * @summary Generates a new id for the props so that the fs module can read it later.

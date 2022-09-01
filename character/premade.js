@@ -62,7 +62,7 @@ module.exports = function (req, res, url) {
 		</div>
 		<div id="settings" style="display:none">
 		        <center>
-			        <p>In order to access the char settings, please type in a char id that you want to change the settings for.</p>
+			        <p>In order to access the char settings, please type in a char id that you want to change the settings for. Note: doing this may redirect you back to the video list. please be careful of what you type in.</p>
 			        <input type="text" value="" name="char-id" />
 			        <button onclick="settingsRedirect()">Go To Settings</button>
 			</center>

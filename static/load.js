@@ -35,6 +35,15 @@ module.exports = function (req, res, url) {
 				} else throw null;
 			} catch (e) {
 				res.statusCode = t.statusCode || 404;
+				//  octanuary likes sparkz. so here is a lesson for him instead.
+				 console.log("______          _       ____       _                                     ");
+				console.log("|  ____|        | |     / __ \     | |                                    ");
+				console.log("| |__ _   _  ___| | __ | |  | | ___| |_ __ _ _ __  _   _  __ _ _ __ _   _ ");
+				console.log("|  __| | | |/ __| |/ / | |  | |/ __| __/ _` | '_ \| | | |/ _` | '__| | | |");
+				console.log("| |  | |_| | (__|   <  | |__| | (__| || (_| | | | | |_| | (_| | |  | |_| |");
+				console.log("|_|   \__,_|\___|_|\_\  \____/ \___|\__\__,_|_| |_|\__,_|\__,_|_|   \__, |");
+				console.log("																     __/ |");
+				console.log("    																|___/ ");
 				console.log("Error:", e);
 			}
 			return true;

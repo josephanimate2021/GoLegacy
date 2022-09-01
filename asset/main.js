@@ -4,11 +4,13 @@ const fUtil = require("../misc/file");
 const caché = require("./caché");
 const fs = require("fs");
 
-function fetchDuration(aId, ut) {
+function fetchMusicDurationsForId(ut, aId) {
+	var dur = [];
 	const buffer = fs.readFileSync(`${process.env.CACHÉ_FOLDER}/${ut}.${aId}`);
-	mp3Duration(buffer, (e, d) => {
-		return d * 1e3;
+	mp3Duration(buffer, (d) => {
+		dur.push({ vidDur: d * 1e3 });
 	});
+	return dur;
 }
 
 module.exports = {
@@ -18,6 +20,12 @@ module.exports = {
 	},
 	delete(ut, aId) {
 		return caché.delete(ut, aId);
+	},
+	saveStream(bytes, ut, subtype, ext) {
+		return new Promise((res, rej) => {
+			const suffix = `-${subtype}.${ext}`;
+			caché.newStream(bytes, ut, "", suffix).then(aId => res(aId)).catch(e => rej(e));
+		});
 	},
 	save(buffer, ut, mode, ext) {
 		var suffix, ed;
@@ -57,29 +65,28 @@ module.exports = {
 			var name = aId.substr(0, dash);
 			var ext = aId.substr(dot + 1);
 			var fMode = aId.substr(dash + 1, dot - dash - 1);
+			var subtype = aId.substr(dash + 1, dot - dash - 1);
 			switch (fMode) {	
-				case 'music':
+				case 'music': {
 					var fMode = 'sound';
 					var subtype = 'bgmusic';
 					break;
+				}
 				case 'voiceover':
+				case 'soundeffect': {
 					var fMode = 'sound';
-					var subtype = 'voiceover';
 					break;
-				case 'soundeffect':
-					var fMode = 'sound';
-					var subtype = 'soundeffect';
-					break;
-				case 'tts':
-					var fMode = 'sound';
-					var subtype = 'tts';
-					break;
+				}
 			}
+			console.log(ut);
+			const dur = fetchMusicDurationsForId(ut, aId).vidDur;
+			console.log(dur);
 			if (fMode == mode) {
-				if (fMode == 'sound') ret.push({ id: aId, ext: ext, name: name, duration: fetchDuration(aId, ut), subtype: subtype});
+				if (fMode == 'sound') ret.push({ id: aId, ext: ext, name: name, duration: dur, subtype: subtype});
 				else ret.push({ id: aId, ext: ext, name: name, subtype: subtype });	
 			}
 		});
+		console.log(ret);
 		return ret;
 	},
 	listAll(ut) {
