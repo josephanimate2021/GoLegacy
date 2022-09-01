@@ -40,6 +40,10 @@ module.exports = {
 		});
 	},
 	update(id, title, tags) {
+		if (!fs.existsSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`)) {
+			console.log("Error Code 404. A file that tried loading was not found.");
+			return;
+		}
 		const db = require('.' + process.env.DATABASES_FOLDER + `/starter-${id}.json`);
 		let meta = {
 			title: title,
