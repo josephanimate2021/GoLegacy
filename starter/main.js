@@ -38,6 +38,13 @@ module.exports = {
 			}).catch(e => rej(e));
 		});
 	},
+	update(id, title, tags) {
+		let meta = {
+			title: title,
+			tags: tags
+		};
+		fs.writeFileSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`, JSON.stringify(meta));
+	},
 	loadZip(mId) {
 		return new Promise((res, rej) => {
 			var filePath = `${folder}/${mId}.xml`
@@ -84,24 +91,17 @@ module.exports = {
 		return table;
 	},
 	meta(movieId) {
-		return new Promise((res, rej) => {
+		return new Promise((res) => {
 			const filepath = `${folder}/${movieId}.xml`;
 			const buffer = fs.readFileSync(filepath);
 
 			const begTitle = buffer.indexOf("<title>") + 16;
 			const endTitle = buffer.indexOf("]]></title>");
-			const subtitle = buffer.slice(begTitle, endTitle).toString().trim();
+			const title = buffer.slice(begTitle, endTitle).toString().trim();
 			
 			const begTag = buffer.indexOf("<tag>") + 14;
 			const endTag = buffer.indexOf("]]></tag>");
-			const subtag = buffer.slice(begTag, endTag).toString();
-			var title, tag;
-			
-			if (!subtitle) title = "Untitled Starter";
-			else title = subtitle;
-			
-			if (!subtag) tag = "none";
-			else tag = subtag;
+			const tag = buffer.slice(begTag, endTag).toString();
 
 			res({
 				date: fs.statSync(filepath).mtime,

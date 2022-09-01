@@ -33,13 +33,15 @@ module.exports = function (req, res, url) {
 				 
 			});
 			return true;
-		}
-		case "/goapi/saveTemplate/": {
+		} case "/goapi/saveTemplate/": {
 			loadPost(req, res).then(([data]) => {
-				thumb = data.thumbnail_large && Buffer.from(data.thumbnail_large, "base64");
+				thumb = data.thumbnail_large && Buffer.from(data.thumbnail, "base64");
 				var body = Buffer.from(data.body_zip, "base64");
 				starter.save(body, thumb, data.movieId).then((nId) => res.end("0" + nId)).catch(e => console.log("Error:", e));
 			});
+			return true;
+		} case "/goapi/updateSysTemplateAttributes/": {
+			loadPost(req, res).then(([data]) => starter.update(data.id || data.movieId, data.title, data.tags));
 			return true;
 		}
 	}
