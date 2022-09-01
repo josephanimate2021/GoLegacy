@@ -52,14 +52,25 @@ module.exports = {
 		var ret = [];
 		var files = caché.list(ut);
 		files.forEach((aId) => {
-			const meta = require('.' + `${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`);
 			var dot = aId.lastIndexOf(".");
 			var dash = aId.lastIndexOf("-");
-			var ext = aId.substr(dot + 1);
-			var fMode = aId.substr(dash + 1, dot - dash - 1);
-			const name = meta.title || aId.substr(0, dash);
-			const subtype = meta.subtype || fMode;
-			switch (fMode) {	
+			let json = {
+				type: mode,
+				subtype: aId.substr(dash + 1, dot - dash - 1),
+				title: aId.substr(0, dash),
+				ext: aId.substr(dot + 1),
+				themeId: "ugc",
+				duration: 0
+			};
+			// if a database file gets deleted, create a new one but with old results. i know, sounds lame. but at least everything is fixed up now.
+			if (!fs.existsSync(`${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`)) {
+				fs.writeFileSync(`${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`, JSON.stringify(json));
+			}
+			const meta = require('.' + `${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`);
+			const name = meta.title || json.title;
+			const subtype = meta.subtype || json.subtype;
+			const ext = meta.ext || json.ext;
+			switch (subtype) {	
 				case 'music':
 				case 'voiceover':
 				case 'soundeffect': {
@@ -67,8 +78,8 @@ module.exports = {
 					break;
 				}
 			}
-			if (fMode == mode) {
-				const dur = meta.duration;
+			if (subtype == mode) {
+				const dur = meta.duration || json.duration;
 				if (fMode == 'sound') {
 					ret.push({ id: aId, ext: ext, name: name, duration: dur, subtype: subtype});
 					console.log(ret);
