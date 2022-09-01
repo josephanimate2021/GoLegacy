@@ -44,10 +44,10 @@ module.exports = {
 			default: {
 				if (!dur) {
 					suffix = `-${mode}.${ext}`;
-					return caché.newItem(buffer, ut, "", suffix, subtype);
+					return caché.newItem(buffer, ut, "", suffix, subtype, mode);
 				} else {
 					suffix = `-${mode}.${ext}`;
-					return caché.newItem(buffer, ut, "", suffix, subtype, dur);
+					return caché.newItem(buffer, ut, "", suffix, subtype, dur, mode);
                                 break;
                         }
                 }
