@@ -7,7 +7,17 @@ const base = Buffer.alloc(1, 0);
 const asset = require("./main");
 const http = require("http");
 const fs = require("fs");
-
+function giveXml(type, v) {
+	var xml, meta;
+	switch (type) {
+		case "movie": {
+			meta = require('.' + process.env.DATABASES_FOLDER + `/starter-${v.id}.json`);
+			xml = `<movie id="${v.id}" enc_asset_id="${v.id}" path="/_SAVED/${v.id}" numScene="1" title="${meta.title}" thumbnail="/starter_thumbs/${v.id}"><tags>${meta.tags || ""}</tags></movie>`;
+			break;
+		}
+	}
+	return xml;
+}
 async function listAssets(data, makeZip) {
 	var xmlString, files;
 	switch (data.type) {
@@ -37,12 +47,7 @@ async function listAssets(data, makeZip) {
 		}
 		case "movie": {
 			files = starter.list();
-			xmlString = `${header}<ugc more="0">${files
-				.map(
-					(v) =>
-						`<movie id="${v.id}" enc_asset_id="${v.id}" path="/_SAVED/${v.id}" numScene="1" title="Untitled" thumbnail="/starter_thumbs/${v.id}"><tags></tags></movie>`
-				)
-				.join("")}</ugc>`;
+			xmlString = `${header}<ugc more="0">${files.map(v => giveXml("movie", v)).join("")}</ugc>`;
 			break;
 		}
 		case "prop": {
