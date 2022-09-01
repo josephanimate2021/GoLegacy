@@ -1,4 +1,10 @@
 const loadPost = require("../misc/post_body");
+const database = require('./database');
+const ffmpeg = require("fluent-ffmpeg");
+ffmpeg.setFfmpegPath(require("@ffmpeg-installer/ffmpeg").path);
+ffmpeg.setFfprobePath(require("@ffprobe-installer/ffprobe").path);
+const { Readable } = require("stream");
+const sharp = require("sharp");
 const mp3Duration = require('mp3-duration');
 const formidable = require("formidable");
 const asset = require("./main");
@@ -14,7 +20,7 @@ const fs = require("fs");
 module.exports = function (req, res, url) {
 	if (req.method != "POST") return;
 	switch (url.pathname) {
-		case "/upload_asset":
+		case "/upload_asset": {
 			try {
 				formidable().parse(req, (_, fields, files) => {
 					var [mId, mode, ext] = fields.params.split(".");
@@ -37,21 +43,43 @@ module.exports = function (req, res, url) {
 				console.log("Error:", e);
 			}
 			return true;
+		}
 		case "/goapi/saveSound/": {
 			loadPost(req, res).then(([data]) => {
-				const ut = data.ut;
-				const bytes = Buffer.from(data.bytes, "base64");
-				const subtype = data.subtype;
-				asset.saveStream(bytes, ut, subtype, "mp3").then(id => {
-					console.log(id);
-					mp3Duration(`${process.env.CACHÉ_FOLDER}/${ut}.${id}`, (e, d) => {
-						var dur = d * 1e3;
-						if (e || !dur) return res.end(1 + util.xmlFail("Unable to save your recording.", e));
-						const title = data.title;
-						res.end(`0<response><asset><id>${id}</id><enc_asset_id>${id}</enc_asset_id><type>${data.type}</type><subtype>${subtype}</subtype><title>${title}</title><published>0</published><tags></tags><duration>${dur}</duration><downloadtype>progressive</downloadtype><file>${id}</file></asset></response>`);
+
+				const buffer = Buffer.from(data.bytes, "base64");
+				const oldStream = Readable.from(buffer);
+				const ext = "ogg";
+			
+				let meta = {
+					type: "sound",
+					subtype: data.subtype,
+					title: data.title,
+					ext: "mp3",
+					themeId: "ugc"
+				};
+			
+				const rej = console.log;
+				const command = ffmpeg(oldStream).inputFormat(ext).toFormat("mp3").on("error", (e) => rej("Error converting audio:", e));
+				const stream = command.pipe();
+
+				let buffers = [];
+				stream.resume();
+				stream.on("data", b => buffers.push(b));
+				stream.on("end", () => {
+					const buf = Buffer.concat(buffers);
+					mp3Duration(buf, (e, duration) => {
+						if (e || !duration) return;
+						meta.duration = 1e3 * duration;
+						const aId = asset.save(buf, data.ut, meta.subtype, meta.ext);
+						// database.save(meta.duration, aId);
+						res.end(
+							`0<response><asset><id>${aId}</id><enc_asset_id>${aId}</enc_asset_id><type>sound</type><subtype>${meta.subtype}</subtype><title>${meta.title}</title><published>0</published><tags></tags><duration>${meta.duration}</duration><downloadtype>progressive</downloadtype><file>${aId}</file></asset></response>`
+						);
 					});
-				}).catch(e => console.log("Error:", e));
+				});
 			});
+			return true;
 		}
 	}
 };
