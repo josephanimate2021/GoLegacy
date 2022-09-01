@@ -42,14 +42,10 @@ module.exports = {
                                 break;
 			}
 			default: {
-				if (!dur) {
-					suffix = `-${mode}.${ext}`;
-					return caché.newItem(buffer, ut, "", suffix, subtype, mode);
-				} else {
-					suffix = `-${mode}.${ext}`;
-					return caché.newItem(buffer, ut, "", suffix, subtype, dur, mode);
+				suffix = `-${mode}.${ext}`;
+				return caché.newItem(buffer, ut, "", suffix, mode);
                                 break;
-                        }
+			}  
                 }
 	},
 	list(ut, mode) {
