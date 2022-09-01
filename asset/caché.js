@@ -160,7 +160,7 @@ module.exports = {
 			themeId: "ugc"
 		};
 		if (dur) meta.duration = dur;
-		fs.writeFileSync(`${process.env.DATABASES_FOLDER}/${aId.slice(0, -4)}.json`, JSON.stringify(meta));
+		fs.writeFileSync(`${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`, JSON.stringify(meta));
 		this.save(ut, aId, buffer);
 		return aId;
 	},
