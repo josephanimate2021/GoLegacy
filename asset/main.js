@@ -69,8 +69,9 @@ module.exports = {
 			const meta = require('.' + `${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`);
 			const name = meta.title || json.title;
 			const subtype = meta.subtype || json.subtype;
+			const fMode = subtype;
 			const ext = meta.ext || json.ext;
-			switch (subtype) {	
+			switch (fMode) {	
 				case 'music':
 				case 'voiceover':
 				case 'soundeffect': {
@@ -78,7 +79,7 @@ module.exports = {
 					break;
 				}
 			}
-			if (subtype == mode) {
+			if (fMode == mode) {
 				const dur = meta.duration || json.duration;
 				if (fMode == 'sound') {
 					ret.push({ id: aId, ext: ext, name: name, duration: dur, subtype: subtype});
