@@ -69,7 +69,7 @@ module.exports = {
 			const meta = require('.' + `${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`);
 			const name = meta.title || json.title;
 			const subtype = meta.subtype || json.subtype;
-			const fMode = subtype;
+			var fMode = subtype;
 			const ext = meta.ext || json.ext;
 			switch (fMode) {	
 				case 'music':

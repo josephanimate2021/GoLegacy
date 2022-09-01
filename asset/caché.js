@@ -1,3 +1,4 @@
+const dbFolder = process.env.DATABASES_FOLDER;
 const cachéFolder = process.env.CACHÉ_FOLDER;
 const propsFolder = process.env.PROPS_FOLDER;
 const fs = require("fs");
@@ -224,6 +225,7 @@ module.exports = {
 		const dot = aId.lastIndexOf(".");
 		const ext = aId.substr(dot + 1);
 		if (ext == "mp3" && fs.existsSync(`${cachéFolder}/${ut}.${aId}.wf`)) this.deleteWaveForm(ut, aId);
+		if (fs.existsSync(`${dbFolder}/meta-${aId.slice(0, -4)}.json`)) this.deleteData(aId.slice(0, -4));
 		const stored = localCaché[ut];
 		if (!stored) return;
 		var path = `${cachéFolder}/${ut}.${aId}`;
@@ -233,6 +235,9 @@ module.exports = {
 	},
 	deleteWaveForm(ut, aId) {
 		fs.unlinkSync(`${cachéFolder}/${ut}.${aId}.wf`);
+	},
+	deleteData(id) {
+		fs.unlinkSync(`${dbFolder}/meta-${id}.json`);
 	},
 	/**
 	 *
