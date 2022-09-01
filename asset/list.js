@@ -8,6 +8,7 @@ const asset = require("./main");
 const http = require("http");
 const fs = require("fs");
 function giveXml(type, v) {
+	if (!fs.existsSync(process.env.DATABASES_FOLDER + `/starter-${v.id}.json`)) return;
 	var xml, meta;
 	switch (type) {
 		case "movie": {
