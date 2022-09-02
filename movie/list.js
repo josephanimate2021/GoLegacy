@@ -16,13 +16,16 @@ module.exports = function (req, res, url) {
 			return true;
 		}
 		case "/charList": {
-			Promise.all(movie.listCharacters().map(character.meta)).then(a => {
-				if (!fs.existsSync(`${process.env.CHARS_FOLDER}/databases/name-${a.id}.txt`)) res.end(JSON.stringify(a));
-				else {
-					const name = fs.readFileSync(`${process.env.CHARS_FOLDER}/databases/name-${a.id}.txt`);
-					res.end(`{"stuff":${JSON.stringify(a)},"name":"${name}"}`);
-				}
-			});
+			const id = movie.fetchCharIds();
+			character.meta(id).then(meta => {
+				let json = {
+					name: fs.readFileSync(`${process.env.CHARS_FOLDER}/databases/name-${id}.txt`),
+					stuff: {
+						meta
+					},
+				};
+				res.end(JSON.stringify(json));
+			});			
 			return true;
 		}
 	}
