@@ -175,7 +175,11 @@ module.exports = {
 			var stored = localCaché[ut];
 			var aId = this.generateId(prefix, suffix, stored);
 			this.save(ut, aId, bytes);
-			res(aId);
+			const name = aId.substr(0, dash);
+			res({
+				title: name,
+				id: aId
+			});
 		});
 	},
 	/**
