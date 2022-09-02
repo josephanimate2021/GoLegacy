@@ -1,5 +1,4 @@
 const loadPost = require("../misc/post_body");
-const database = require('./database');
 const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(require("@ffmpeg-installer/ffmpeg").path);
 ffmpeg.setFfprobePath(require("@ffprobe-installer/ffprobe").path);
