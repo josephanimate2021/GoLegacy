@@ -74,15 +74,13 @@ module.exports = {
 		});
 		return array;
 	},
-	listCharacters() {
-		const array = [];
+	fetchCharIds() {
 		const last = fUtil.getLastFileIndex("char-", ".xml");
 		for (let c = last; c >= 0; c--) {
 			const movie = fs.existsSync(fUtil.getFileIndex("char-", ".xml", c));
 			const thumb = fs.existsSync(fUtil.getFileIndex("char-", ".png", c));
-			if (movie && thumb) array.push(`c-${c}`);
+			if (movie && thumb) return `c-${c}`;
 		}
-		return array;
 	},
 	meta(movieId) {
 		const filepath = `${folder}/${movieId}.xml`;
