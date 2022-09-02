@@ -13,7 +13,7 @@ function loadRows() {
 		const tbl = json[c];
 		var htmlFunction;
 		if (!c > json) htmlFunction = '<center><p>You currently have no characters at the monent. <a href="/cc_browser?themeId=family">Create one now using the swf edition of the cc browser.</a></p></center>';
-		else htmlFunction = '<li><p>Character Id: ' + tbl.id + '</p><a href="javascript:;" title="' + tbl.name + '"><figure><img src="/char_thumbs/' + tbl.id + '.png" alt="Character ' + tbl.id + '" /><figcaption><p class="description"><span onclick="' + tbl.function + '" class="price">Make A Copy</span></p></figcaption></figure></a></li>';
+		else htmlFunction = '<li><p>Character Id: ' + tbl.id + '</p><a href="javascript:;" title="Customize"><figure><img src="/char_thumbs/' + tbl.id + '.png" alt="Character ' + tbl.id + '" /><figcaption><p class="description"><span onclick="' + tbl.function + '" class="price">Make A Copy</span></p></figcaption></figure></a></li>';
 		grid.insertAdjacentHTML('beforeend', htmlFunction);
 	}
 }
