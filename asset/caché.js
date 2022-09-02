@@ -153,7 +153,9 @@ module.exports = {
 		var aId = this.generateId(prefix, suffix, stored);
 		var dot = aId.lastIndexOf(".");
 		var dash = aId.lastIndexOf("-");
-		mp3Duration(`${cachéFolder}/${ut}.${aId}`, (e, d) => {
+		this.save(ut, aId, buffer);
+		const buff = fs.readFileSync(`${cachéFolder}/${ut}.${aId}`);
+		mp3Duration(buff, (e, d) => {
 			let meta = {
 				subtype: aId.substr(dash + 1, dot - dash - 1),
 				title: aId.substr(0, dash),
@@ -165,7 +167,6 @@ module.exports = {
 				meta.type = "sound";
 			} else meta.type = mode;
 			fs.writeFileSync(`${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`, JSON.stringify(meta));
-			this.save(ut, aId, buffer);
 			return aId;
 		});
 	},
