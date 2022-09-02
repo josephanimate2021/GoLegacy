@@ -17,8 +17,11 @@ module.exports = function (req, res, url) {
 		}
 		case "/charList": {
 			Promise.all(movie.listCharacters().map(character.meta)).then(a => {
-				const name = fs.readFileSync(`${process.env.CHARS_FOLDER}/databases/name-${a.id}.txt`);
-				res.end(`{"stuff":${JSON.stringify(a)},"name":"${name}"}`);
+				if (!fs.existsSync(`${process.env.CHARS_FOLDER}/databases/name-${a.id}.txt`)) res.end(JSON.stringify(a));
+				else {
+					const name = fs.readFileSync(`${process.env.CHARS_FOLDER}/databases/name-${a.id}.txt`);
+					res.end(`{"stuff":${JSON.stringify(a)},"name":"${name}"}`);
+				}
 			});
 			return true;
 		}
