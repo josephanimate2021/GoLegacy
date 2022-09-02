@@ -34,10 +34,48 @@ module.exports = function (req, res, url) {
 
 					var path = files.import.path;
 					var buffer = fs.readFileSync(path);
-					asset.save(buffer, ut, mode, ext);
-					fs.unlinkSync(path);
-					delete buffer;
-					res.end();
+					if (ext == "mp3" && ext == "wav") {
+						const oldStream = Readable.from(buffer);
+						let stream;
+						let meta = {
+							type: "sound",
+							subtype: mode,
+							ext: "mp3",
+							themeId: "ugc"
+						};
+						if (ext == "mp3") stream = oldStream;
+						else {
+							const rej = console.log;
+							const command = ffmpeg(oldStream).inputFormat(ext).toFormat("mp3").on("error", (e) => {
+								rej("Error converting audio:", e);
+							});
+							stream = command.pipe();
+						}
+						
+						let buffers = [];
+						stream.resume();
+						stream.on("data", b => buffers.push(b));
+						stream.on("end", () => {
+							const buf = Buffer.concat(buffers);
+							mp3Duration(buf, (e, duration) => {
+								if (e || !duration) return;
+								meta.duration = 1e3 * duration;
+								asset.saveWav(buf, ut, meta.subtype, meta.ext).then(assetMeta => {
+									const aId = assetMeta.aId;
+									meta.title = assetMeta.title;
+									fs.writeFileSync(`${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`, JSON.stringify(meta));
+								});
+								fs.unlinkSync(path);
+								delete buffer;
+								res.end();
+							});
+						});
+					} else {
+						asset.save(buffer, mId, mode, ext);
+						fs.unlinkSync(path);
+						delete buffer;
+						res.end();
+					}
 				});
 			} catch (e) {
 				console.log("Error:", e);
