@@ -161,7 +161,7 @@ module.exports = {
 				themeId: "ugc"
 			};
 			if (meta.ext == "mp3") {
-				meta.duration = d;
+				meta.duration = 1e3 * d;
 				meta.type = "sound";
 			} else meta.type = mode;
 			fs.writeFileSync(`${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`, JSON.stringify(meta));
