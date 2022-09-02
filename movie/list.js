@@ -16,16 +16,7 @@ module.exports = function (req, res, url) {
 			return true;
 		}
 		case "/charList": {
-			const id = movie.fetchCharIds();
-			character.meta(id).then(meta => {
-				let json = {
-					name: fs.readFileSync(`${process.env.CHARS_FOLDER}/databases/name-${id}.txt`),
-					stuff: {
-						meta
-					},
-				};
-				res.end(JSON.stringify(json));
-			});			
+			Promise.all(movie.listCharacters().map(character.meta)).then((a) => res.end(JSON.stringify(a)));	
 			return true;
 		}
 	}
