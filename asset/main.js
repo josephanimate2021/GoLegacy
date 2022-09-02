@@ -71,10 +71,10 @@ module.exports = {
 				fs.writeFileSync(`${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`, JSON.stringify(json));
 			}
 			const meta = require('.' + `${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`);
-			const name = meta.title || json.title;
-			const subtype = meta.subtype || json.subtype;
+			const name = meta.title;
+			const subtype = meta.subtype;
 			var fMode = subtype;
-			const ext = meta.ext || json.ext;
+			const ext = meta.ext;
 			switch (fMode) {	
 				case 'music':
 				case 'voiceover':
@@ -84,7 +84,7 @@ module.exports = {
 				}
 			}
 			if (fMode == mode) {
-				const dur = meta.duration || json.duration;
+				const dur = meta.duration;
 				if (fMode == 'sound') {
 					ret.push({ id: aId, ext: ext, name: name, duration: dur, subtype: subtype});
 					console.log(ret);
