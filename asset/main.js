@@ -1,6 +1,5 @@
 var mp3Duration = require("mp3-duration");
 const chars = require("../character/main");
-const database = require("./database");
 const fUtil = require("../misc/file");
 const caché = require("./caché");
 const fs = require("fs");
@@ -13,13 +12,16 @@ module.exports = {
 	delete(ut, aId) {
 		return caché.delete(ut, aId);
 	},
-	saveStream(bytes, ut, subtype, ext) {
+	saveWav(buffer, ut, subtype, ext) {
 		return new Promise((res, rej) => {
 			const suffix = `-${subtype}.${ext}`;
-			caché.newStream(bytes, ut, "", suffix).then(aId => res(aId)).catch(e => rej(e));
+			caché.newStream(buffer, ut, "", suffix).then((meta, aId, title) => res({
+				id: aId,
+				title: title
+			})).catch(e => rej(e));
 		});
 	},
-	save(buffer, ut, mode, ext, dur = false, subtype) {
+	save(buffer, ut, mode, ext) {
 		var suffix;
                 switch (mode) { 
 			case "prop": { 
