@@ -15,10 +15,12 @@ module.exports = {
 	saveWav(buffer, ut, subtype, ext) {
 		return new Promise((res, rej) => {
 			const suffix = `-${subtype}.${ext}`;
-			caché.newStream(buffer, ut, "", suffix).then((meta, aId, title) => res({
-				id: aId,
-				title: title
-			})).catch(e => rej(e));
+			caché.newStream(buffer, ut, "", suffix).then(meta => {
+				res({
+					aId: meta.id,
+					title: meta.title
+				});
+			}).catch(e => rej(e));
 		});
 	},
 	save(buffer, ut, mode, ext) {
