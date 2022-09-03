@@ -19,6 +19,26 @@ function giveXml(type, v) {
 	}
 	return xml;
 }
+function meta2Xml(type, v) {
+	if (!fs.existsSync(process.env.DATABASES_FOLDER + `/meta-${v.id.slice(0, -4)}.json`)) return;
+	var xml;
+	const meta = require('.' + process.env.DATABASES_FOLDER + `/meta-${v.id.slice(0, -4)}.json`);
+	switch (type) {
+		case "prop": {
+			xml = `<prop subtype="0" id="${v.id}" name="${meta.title}" enable="Y" holdable="0" headable="0" placeable="1" facing="left" width="0" height="0" asset_url="${process.env.PROPS_FOLDER}/${v.id}"/>`;
+			break;
+		}
+		case "bg": {
+			xml = `<background subtype="0" id="${v.id}" name="${meta.title}" enable="Y"/>`;
+			break;
+		}
+		case "sound": {
+			xml = `<sound subtype="${meta.subtype}" id="${v.id}" name="${meta.title}" enable="Y" duration="${meta.duration}" downloadtype="progressive"/>`;
+			break;
+		}
+	}
+	return xml;
+}
 async function listAssets(data, makeZip) {
 	var xmlString, files;
 	switch (data.type) {
@@ -32,37 +52,14 @@ async function listAssets(data, makeZip) {
 				.join("")}</ugc>`;
 			break;
 		}
-		case "bg": {
-			files = asset.list(data.ut, "bg");
-			xmlString = `${header}<ugc more="0">${files
-				.map((v) => `<background subtype="0" id="${v.id}" name="${v.name}" enable="Y"/>`)
-				.join("")}</ugc>`;
-			break;
-		}
-		case "sound": {
-			files = asset.list(data.ut, "sound");
-			xmlString = `${header}<ugc more="0">${files
-				.map((v) =>`<sound subtype="${v.subtype}" id="${v.id}" name="${v.name}" enable="Y" duration="${v.duration}" downloadtype="progressive"/>`)
-				.join("")}</ugc>`;
-			break;
-		}
 		case "movie": {
 			files = starter.list();
 			xmlString = `${header}<ugc more="0">${files.map(v => giveXml("movie", v)).join("")}</ugc>`;
 			break;
 		}
-		case "prop": {
-			files = asset.list(data.ut, "prop");
-			xmlString = `${header}<ugc more="0">${files
-				.map(
-				        (v) =>
-						`<prop subtype="0" id="${v.id}" name="${v.name}" enable="Y" holdable="0" headable="0" placeable="1" facing="left" width="0" height="0" asset_url="${process.env.PROPS_FOLDER}/${v.id}"/>`
-				)
-				.join("")}</ugc>`;
-			break;
-		}
 		default: {
-			xmlString = `${header}<ugc more="0"></ugc>`;
+			files = asset.list(data.ut, data.type);
+			xmlString = `${header}<ugc more="0">${files.map(v => meta2Xml(data.type, v)).join("")}</ugc>`;
 			break;
 		}
 	}

@@ -4,6 +4,7 @@ const character = require("../character/main");
 const movie = require("../movie/main");
 const starter = require("../starter/main");
 const http = require("http");
+const fs = require("fs");
 
 /**
  * @param {http.IncomingMessage} req
@@ -80,6 +81,24 @@ module.exports = function (req, res, url) {
 						console.log("Error:", e);
 					}
 					return true;
+				}
+				case "/goapi/updateAsset/": {
+					loadPost(req, res).then(([data]) => {
+						if (!fs.existsSync(`${process.env.DATABASES_FOLDER}/meta-${data.assetId.slice(0, -4)}.json`)) return;
+						const db = require('.' + process.env.DATABASES_FOLDER + `/meta-${data.assetId.slice(0, -4)}.json`);
+						const mp3Meta = `{"subtype":"${db.subtype}","title":"${data.title}","ext":"${db.ext}","themeId":"${db.themeId}","duration":${db.duration},"type":"${db.type}"}`;
+						const meta = `{"subtype":"${db.subtype}","title":"${data.title}","ext":"${db.ext}","themeId":"${db.themeId}","type":"${db.type}"}`;
+						switch (db.ext) {
+							case "mp3": {
+								fs.writeFileSync(`${process.env.DATABASES_FOLDER}/meta-${data.assetId.slice(0, -4)}.json`, mp3Meta);
+								break;
+							}
+							default: {
+								fs.writeFileSync(`${process.env.DATABASES_FOLDER}/meta-${data.assetId.slice(0, -4)}.json`, meta);
+								break;
+							}
+						}
+					});
 				}
 				default: return;
 			}
