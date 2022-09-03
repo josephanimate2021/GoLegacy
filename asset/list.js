@@ -9,12 +9,13 @@ const http = require("http");
 const fs = require("fs");
 function giveXml(type, v) {
 	const tempMeta = process.env.DATABASE_TEMP_FOLDER + `/starter-${v.id}.json`;
+	if (!fs.existsSync(tempMeta)) return;
 	const buffer = fs.readFileSync(tempMeta);
 	if (!fs.existsSync(process.env.DATABASES_FOLDER + `/starter-${v.id}.json`)) {
 		if (fs.existsSync(tempMeta)) {
 			fs.writeFileSync(process.env.DATABASES_FOLDER + `/starter-${v.id}.json`, buffer);
 			fs.unlinkSync(tempMeta);
-		} else return;
+		}
 	}
 	var xml, meta;
 	switch (type) {
