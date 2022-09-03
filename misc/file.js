@@ -12,6 +12,14 @@ module.exports = {
 	padZero(n, l = process.env.FILE_NUM_WIDTH) {
 		return ("" + n).padStart(l, "0");
 	},
+	refreshAssetDataBase(id) {
+		const data = fs.readFileSync(`${process.env.DATABASES_FOLDER}/meta-${id}.json`);
+		return JSON.parse(data);
+	},
+	refreshStarterDataBase(id) {
+		const data = fs.readFileSync(`${process.env.DATABASES_FOLDER}/meta-${id}.json`);
+		return JSON.parse(data);
+	},
 	/**
 	 *
 	 * @param {string} temp
