@@ -84,7 +84,7 @@ module.exports = function (req, res, url) {
 				}
 				case "/goapi/updateAsset/": {
 					loadPost(req, res).then(([data]) => {
-						if (!fs.existsSync(`${process.env.DATABASES_FOLDER}/name-meta-${data.assetId.slice(0, -4)}.json`)) return;
+						if (!fs.existsSync(`${process.env.DATABASES_FOLDER}/name-meta-${data.assetId.slice(0, -4)}.txt`)) return;
 						fs.writeFileSync(`${process.env.DATABASES_FOLDER}/name-meta-${data.assetId.slice(0, -4)}.txt`, data.title);
 					});
 				}
