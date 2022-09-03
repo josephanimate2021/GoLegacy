@@ -21,23 +21,21 @@ function giveXml(type, v) {
 	return xml;
 }
 function meta2Xml(type, v) {
-	if (!fs.existsSync(process.env.DATABASES_FOLDER + `/meta-${v.id.slice(0, -4)}.json`)) return;
-	// refesh the database
-	fUtil.refreshAssetDataBase(v.id.slice(0, -4));
-	// get the stuff
+	if (!fs.existsSync(process.env.DATABASES_FOLDER + `/meta-${v.id.slice(0, -4)}.json`) && !fs.existsSync(process.env.DATABASES_FOLDER + `/name-meta-${v.id.slice(0, -4)}.txt`)) return;
 	var xml;
 	const meta = require('.' + process.env.DATABASES_FOLDER + `/meta-${v.id.slice(0, -4)}.json`);
+	const name = fs.readFileSync(process.env.DATABASES_FOLDER + `/name-meta-${v.id.slice(0, -4)}.txt`);
 	switch (type) {
 		case "prop": {
-			xml = `<prop subtype="0" id="${v.id}" name="${meta.title}" enable="Y" holdable="0" headable="0" placeable="1" facing="left" width="0" height="0" asset_url="${process.env.PROPS_FOLDER}/${v.id}"/>`;
+			xml = `<prop subtype="0" id="${v.id}" name="${name}" enable="Y" holdable="0" headable="0" placeable="1" facing="left" width="0" height="0" asset_url="${process.env.PROPS_FOLDER}/${v.id}"/>`;
 			break;
 		}
 		case "bg": {
-			xml = `<background subtype="0" id="${v.id}" name="${meta.title}" enable="Y"/>`;
+			xml = `<background subtype="0" id="${v.id}" name="${name}" enable="Y"/>`;
 			break;
 		}
 		case "sound": {
-			xml = `<sound subtype="${meta.subtype}" id="${v.id}" name="${meta.title}" enable="Y" duration="${meta.duration}" downloadtype="progressive"/>`;
+			xml = `<sound subtype="${meta.subtype}" id="${v.id}" name="${name}" enable="Y" duration="${meta.duration}" downloadtype="progressive"/>`;
 			break;
 		}
 	}
