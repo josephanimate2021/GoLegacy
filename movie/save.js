@@ -43,7 +43,11 @@ module.exports = function (req, res, url) {
 		} case "/goapi/updateSysTemplateAttributes/": {
 			loadPost(req, res).then(([data]) => {
 				const { movieId: id, title, tags } = data;
-				starter.update(id, title, tags);
+				starter.update(id, title, tags).then(json => {
+					console.log("Your starter has been updated sucessfully! data:", json);
+				}).catch(e => {
+					console.log(e);
+				});
 			});
 			return true;
 		}
