@@ -14,11 +14,11 @@ module.exports = {
 	},
 	refreshAssetDataBase(id) {
 		const data = fs.readFileSync(`${process.env.DATABASES_FOLDER}/meta-${id}.json`);
-		return JSON.parse(data);
+	        JSON.parse(data);
 	},
 	refreshStarterDataBase(id) {
 		const data = fs.readFileSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`);
-		return JSON.parse(data);
+		JSON.parse(data);
 	},
 	/**
 	 *
