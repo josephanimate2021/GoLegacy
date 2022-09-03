@@ -30,11 +30,11 @@ module.exports = {
 					this.meta(id).then(mMeta => {
 						// save the title & tags to get modifed by the user later.
 						let jMeta = {
-							title: mMeta.title,
 							sceneCount: mMeta.sceneCount,
-							tags: mMeta.tag
 						};
 						fs.writeFileSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`, JSON.stringify(jMeta));
+						fs.writeFileSync(`${process.env.DATABASES_FOLDER}/name-starter-${id}.txt`, mMeta.title);
+						fs.writeFileSync(`${process.env.DATABASES_FOLDER}/tag-starter-${id}.txt`, mMeta.tag);
 					});
 					res(id);
 				});
@@ -42,18 +42,13 @@ module.exports = {
 		});
 	},
 	update(id, title, tags) {
-		return new Promise((res, rej) => {
-			if (!fs.existsSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`)) rej("Error Code 404. A file that tried loading was not found.");
-			const db = require('.' + process.env.DATABASES_FOLDER + `/starter-${id}.json`);
-			let meta = {
-				title: title,
-				sceneCount: db.sceneCount,
-				tags: tags
-			};
-			fs.writeFileSync(`${process.env.DATABASE_TEMP_FOLDER}/starter-${id}.json`, JSON.stringify(meta));
-			fs.unlinkSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`);
-			res(JSON.stringify(meta));
-		});
+		if (!fs.existsSync(`${process.env.DATABASES_FOLDER}/name-starter-${id}.txt`) 
+		    && !fs.existsSync(`${process.env.DATABASES_FOLDER}/tag-starter-${id}.txt`)) {
+			console.log("Error Code 404. A file that tried loading was not found.");
+			return;
+		}
+		fs.writeFileSync(`${process.env.DATABASES_FOLDER}/name-starter-${id}.txt`, title);
+		fs.writeFileSync(`${process.env.DATABASES_FOLDER}/tags-starter-${id}.txt`, tags);
 	},
 	loadZip(mId) {
 		return new Promise((res, rej) => {
