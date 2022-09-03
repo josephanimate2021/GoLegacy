@@ -9,7 +9,7 @@ const env = Object.assign(process.env, require("./env"), require("./config"));
 
 // folders
 const charDataBase = env.CHARS_FOLDER + "/databases";
-const datab = env.DATABASES_FOLDER;
+const datab = env.DATABASE_TEMP_FOLDER;
 const start = env.STARTERS_FOLDER;
 const asset = env.PROPS_FOLDER;
 const cache = env.CACHÉ_FOLDER;
