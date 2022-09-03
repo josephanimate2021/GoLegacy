@@ -8,20 +8,13 @@ const asset = require("./main");
 const http = require("http");
 const fs = require("fs");
 function giveXml(type, v) {
-	if (!fs.existsSync(process.env.DATABASES_FOLDER + `/starter-${v.id}.json`)) {
-		if (!fs.existsSync(tempMeta)) return;
-		else {
-			const tempMeta = process.env.DATABASE_TEMP_FOLDER + `/starter-${v.id}.json`;
-			const buffer = fs.readFileSync(tempMeta);
-			fs.writeFileSync(process.env.DATABASES_FOLDER + `/starter-${v.id}.json`, buffer);
-			fs.unlinkSync(tempMeta);
-		}
-	}
-	var xml, meta;
+	var xml, meta, name, tags;
 	switch (type) {
 		case "movie": {
 			meta = require('.' + process.env.DATABASES_FOLDER + `/starter-${v.id}.json`);
-			xml = `<movie id="${v.id}" enc_asset_id="${v.id}" path="/_SAVED/${v.id}" numScene="${meta.sceneCount || "1"}" title="${meta.title || "Untitled"}" thumbnail="/starter_thumbs/${v.id}"><tags>${meta.tags || ""}</tags></movie>`;
+			name = fs.readFileSync(process.env.DATABASES_FOLDER + `/name-starter-${v.id}.txt`);
+			tags = fs.readFileSync(process.env.DATABASES_FOLDER + `/tag-starter-${v.id}.txt`);
+			xml = `<movie id="${v.id}" enc_asset_id="${v.id}" path="/_SAVED/${v.id}" numScene="${meta.sceneCount || "1"}" title="${name || "Untitled"}" thumbnail="/starter_thumbs/${v.id}"><tags>${tags || ""}</tags></movie>`;
 			break;
 		}
 	}
