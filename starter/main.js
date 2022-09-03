@@ -50,8 +50,9 @@ module.exports = {
 				sceneCount: db.sceneCount,
 				tags: tags
 			};
-			fs.writeFileSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`, JSON.stringify(meta));
-			res(fUtil.refreshStarterDataBase(id));
+			fs.writeFileSync(`${process.env.DATABASE_TEMP_FOLDER}/starter-${id}.json`, JSON.stringify(meta));
+			fs.unlinkSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`);
+			res(JSON.stringify(meta));
 		});
 	},
 	loadZip(mId) {
