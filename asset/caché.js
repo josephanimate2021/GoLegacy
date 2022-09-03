@@ -158,7 +158,6 @@ module.exports = {
 		mp3Duration(buff, (e, d) => {
 			let meta = {
 				subtype: aId.substr(dash + 1, dot - dash - 1),
-				title: aId.substr(0, dash),
 				ext: aId.substr(dot + 1),
 				themeId: "ugc"
 			};
@@ -167,6 +166,7 @@ module.exports = {
 				meta.type = "sound";
 			} else meta.type = mode;
 			fs.writeFileSync(`${process.env.DATABASES_FOLDER}/meta-${aId.slice(0, -4)}.json`, JSON.stringify(meta));
+			fs.writeFileSync(`${process.env.DATABASES_FOLDER}/name-meta-${aId.slice(0, -4)}.txt`, aId.substr(0, dash));
 			return aId;
 		});
 	},
