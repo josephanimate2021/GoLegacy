@@ -42,17 +42,17 @@ module.exports = {
 		});
 	},
 	update(id, title, tags) {
-		if (!fs.existsSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`)) {
-			console.log("Error Code 404. A file that tried loading was not found.");
-			return;
-		}
-		const db = require('.' + process.env.DATABASES_FOLDER + `/starter-${id}.json`);
-		let meta = {
-			title: title,
-			sceneCount: db.sceneCount,
-			tags: tags
-		};
-		fs.writeFileSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`, JSON.stringify(meta));
+		return new Promise((res, rej) => {
+			if (!fs.existsSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`)) rej("Error Code 404. A file that tried loading was not found.");
+			const db = require('.' + process.env.DATABASES_FOLDER + `/starter-${id}.json`);
+			let meta = {
+				title: title,
+				sceneCount: db.sceneCount,
+				tags: tags
+			};
+			fs.writeFileSync(`${process.env.DATABASES_FOLDER}/starter-${id}.json`, JSON.stringify(meta));
+			res(fUtil.refreshStarterDataBase(id));
+		});
 	},
 	loadZip(mId) {
 		return new Promise((res, rej) => {
