@@ -9,6 +9,9 @@ const http = require("http");
 const fs = require("fs");
 function giveXml(type, v) {
 	if (!fs.existsSync(process.env.DATABASES_FOLDER + `/starter-${v.id}.json`)) return;
+	// refesh the database
+	fUtil.refreshStarterDataBase(v.id);
+	// get the stuff
 	var xml, meta;
 	switch (type) {
 		case "movie": {
@@ -20,10 +23,10 @@ function giveXml(type, v) {
 	return xml;
 }
 function meta2Xml(type, v) {
+	if (!fs.existsSync(process.env.DATABASES_FOLDER + `/meta-${v.id.slice(0, -4)}.json`)) return;
 	// refesh the database
 	fUtil.refreshAssetDataBase(v.id.slice(0, -4));
 	// get the stuff
-	if (!fs.existsSync(process.env.DATABASES_FOLDER + `/meta-${v.id.slice(0, -4)}.json`)) return;
 	var xml;
 	const meta = require('.' + process.env.DATABASES_FOLDER + `/meta-${v.id.slice(0, -4)}.json`);
 	switch (type) {
