@@ -20,6 +20,9 @@ function giveXml(type, v) {
 	return xml;
 }
 function meta2Xml(type, v) {
+	// refesh the database
+	fUtil.refreshAssetDataBase(v.id.slice(0, -4));
+	// get the stuff
 	if (!fs.existsSync(process.env.DATABASES_FOLDER + `/meta-${v.id.slice(0, -4)}.json`)) return;
 	var xml;
 	const meta = require('.' + process.env.DATABASES_FOLDER + `/meta-${v.id.slice(0, -4)}.json`);
@@ -38,6 +41,7 @@ function meta2Xml(type, v) {
 		}
 	}
 	return xml;
+	console.log(meta);
 }
 async function listAssets(data, makeZip) {
 	var xmlString, files;
