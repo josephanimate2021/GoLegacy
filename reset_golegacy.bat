@@ -56,11 +56,10 @@ echo Time to choose. && goto wrapperidle
 :update
 cls
 pushd "%~dp0"
-echo Pulling repository from GitHub...
-git pull
+echo Pulling The Latest Commit from GitHub...
+git stash
 cls
-echo GoLegacy has been updated^^!
-start "" "%~dp0"
+echo GoLegacy has been sucessfully been reset^^!
 pause & exit
 
 :exit
