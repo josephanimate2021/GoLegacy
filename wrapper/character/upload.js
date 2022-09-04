@@ -77,7 +77,7 @@ module.exports = async function (req, res, url) {
 					fs.writeFileSync(`${savedFolder}/${id}.png`, sub);
 				}
 				fs.writeFileSync(`${savedFolder}/${id}.xml`, buffer);
-				Movie.meta(id).then(meta => {
+				Movie.meta(id, true).then(meta => {
 					const db = DB.get();
 					db.assets.push({
 						id: id,
