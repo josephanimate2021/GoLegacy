@@ -1,0 +1,14 @@
+<header>
+	<a href="/">
+		<p style="margin:0">GoLegacy Version <%= it.env.WRAPPER_VER %></p>
+	</a>
+	<nav id="headbuttons">
+		<a class="button_small" onclick="document.getElementById('file').click()">UPLOAD A CHAR</a>
+		<a href="/create?filter=cc" class="button_small">CREATE A CHARACTER</a>
+		<a href="/create" class="button_big">MAKE A VIDEO</a>
+	</nav>
+</header>
+
+<form enctype='multipart/form-data' action='/upload_character' method='post'>
+	<input id='file' type="file" onchange="this.form.submit()" name='import' />
+</form>

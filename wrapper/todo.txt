@@ -1,0 +1,2 @@
+- add login/signup pages in the frontend
+- fix watermarks in the backend
