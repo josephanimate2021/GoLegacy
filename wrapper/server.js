@@ -1,5 +1,5 @@
 /**
- * start wrapper: offline's server
+ * start golegacy's server
  */
 // modules
 const http = require("http");
