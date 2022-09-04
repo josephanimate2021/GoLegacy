@@ -56,6 +56,8 @@ if not exist node_modules (
         echo Error: Node.js could not be loaded! Trying again with the npm install command...
         npm install
         echo Loading Node.js Again...
+        :: why cd wrapper again. it should work without having to cd it.
+        cd wrapper
         npm start
         pause
 ) else (
