@@ -13,13 +13,13 @@ const Starter = require("./main");
  */
 module.exports = async function (req, res, url) {
 	if (req.method != "POST" || url.pathname != "/goapi/saveTemplate/") return;
-	else if (!req.body.body_zip || !req.body.thumbnail_large) {
+	else if (!req.body.body_zip || !req.body.thumbnail) {
 		res.statusCode = 400;
 		res.end();
 		return true;
 	}
 	const body = Buffer.from(req.body.body_zip, "base64");
-	const thumb = Buffer.from(req.body.thumbnail_large, "base64");
+	const thumb = Buffer.from(req.body.thumbnail, "base64");
 
 	try {
 		const mId = await Starter.save(body, thumb, req.body.movieId)

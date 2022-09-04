@@ -15,7 +15,6 @@
 			<a class="button_big" href="/create">MAKE A VIDEO</a>
 		</div>
 	</div>
-	<div class="warning">Welcome to GoLegacy! Feel free to do whatever you want here.</div>
 </header>
 
 <form enctype='multipart/form-data' action='/upload_character' method='post'>

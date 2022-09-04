@@ -6,6 +6,7 @@ const fs = require("fs");
 const nodezip = require("node-zip");
 const path = require("path");
 // vars
+const mFolder = path.join(__dirname, "../", process.env.MOVIES_FOLDER);
 const folder = path.join(__dirname, "../", process.env.SAVED_FOLDER);
 const base = Buffer.alloc(1, 0);
 // stuff
@@ -20,10 +21,10 @@ module.exports = {
 	delete(mId) {
 		console.log(mId.length);
 		// find files by id and delete them
-		const match = fs.readdirSync(folder)
+		const match = fs.readdirSync(mFolder)
 			.filter(file => file.includes(mId));
 		if (match) match.forEach(filename => 
-			fs.unlinkSync(path.join(folder, filename)));
+			fs.unlinkSync(path.join(mFolder, filename)));
 	},
 
 	/**
@@ -33,12 +34,12 @@ module.exports = {
 	 */
 	list() {
 		const array = [];
-		fs.readdirSync(folder).forEach(fn => {
+		fs.readdirSync(mFolder).forEach(fn => {
 			if (!fn.includes(".xml")) return;
 			// check if the movie and thumbnail exists
 			const mId = fn.substring(0, fn.length - 4);
-			const movie = fs.existsSync(`${folder}/${mId}.xml`);
-			const thumb = fs.existsSync(`${folder}/${mId}.png`);
+			const movie = fs.existsSync(`${mFolder}/${mId}.xml`);
+			const thumb = fs.existsSync(`${mFolder}/${mId}.png`);
 			if (movie && thumb) array.push(mId);
 		});
 		return array;
@@ -51,7 +52,7 @@ module.exports = {
 	 * @returns {Buffer}
 	 */
 	async load(mId, isGet = true) {
-		const filepath = path.join(folder, `${mId}.xml`);
+		const filepath = path.join(mFolder, `${mId}.xml`);
 		if (!fs.existsSync(filepath)) throw new Error("Movie not found.");
 
 		const buffer = fs.readFileSync(filepath);
@@ -65,7 +66,7 @@ module.exports = {
 	 * @returns {Buffer}
 	 */
 	loadXML(mId) {
-		const filepath = path.join(folder, `${mId}.xml`);
+		const filepath = path.join(mFolder, `${mId}.xml`);
 		if (!fs.existsSync(filepath)) throw new Error("Movie not found.");
 
 		const buffer = fs.readFileSync(filepath);
@@ -85,7 +86,9 @@ module.exports = {
 	 * }} 
 	 */
 	async meta(mId, getSc = false) {
-		const filepath = path.join(folder, `${mId}.xml`);
+		var filepath;
+		if (!getSc) filepath = path.join(mFolder, `${mId}.xml`);
+		else filepath = path.join(folder, `${mId}.xml`);
 		const buffer = fs.readFileSync(filepath);
 
 		// title
@@ -145,12 +148,12 @@ module.exports = {
 		mId ||= fUtil.generateId();
 
 		// save the thumbnail on manual saves
-		if (thumb) fs.writeFileSync(path.join(folder, `${mId}.png`), thumb);
+		if (thumb) fs.writeFileSync(path.join(mFolder, `${mId}.png`), thumb);
 		// extract the movie xml and save it
 		const zip = nodezip.unzip(body);
 		const xmlStream = zip["movie.xml"].toReadStream();
 
-		let writeStream = fs.createWriteStream(path.join(folder, `${mId}.xml`));
+		let writeStream = fs.createWriteStream(path.join(mFolder, `${mId}.xml`));
 		xmlStream.on("data", b => writeStream.write(b));
 		xmlStream.on("end", async () => {
 			writeStream.close();
@@ -159,7 +162,7 @@ module.exports = {
 	},
 
 	saveXML(body, mId) {
-		const filepath = path.join(folder, `${mId}.xml`);
+		const filepath = path.join(mFolder, `${mId}.xml`);
 		// check if the movie exists
 		if (!fs.existsSync(filepath)) throw new Error("Movie not found.");
 		// save the file
@@ -176,5 +179,10 @@ module.exports = {
 		const match = fs.readdirSync(folder)
 			.find(file => file.includes(`${mId}.png`));
 		return match ? fs.readFileSync(path.join(folder, match)) : null;
+	},
+	mThumb(mId) { // look for match in folder
+		const match = fs.readdirSync(mFolder)
+			.find(file => file.includes(`${mId}.png`));
+		return match ? fs.readFileSync(path.join(mFolder, match)) : null;
 	},
 }
