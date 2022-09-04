@@ -46,11 +46,11 @@ module.exports = async function (req, res, url) {
 
 			try {
 				Asset.update(req.body.data.id || req.body.data.starter_id, req.body.data);
-				res.end("{'status':'ok'}");
+				res.end(JSON.stringify({ status: "ok" }));
 			} catch (err) {
 				console.error("Error updating asset:", err);
 				res.statusCode = 404;
-				res.end("{'status':'error'}");
+				res.end(JSON.stringify({ status: "error" }));
 			}
 			break;
 		} default: return;
