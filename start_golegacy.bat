@@ -1,6 +1,6 @@
 :: GoLegacy Launcher
 :: License: MIT
-set WRAPPER_VER=0.0.2
+set WRAPPER_VER=0.0.1.2
 title GoLegacy v%WRAPPER_VER% [Initializing...]
 
 ::::::::::::::::::::
