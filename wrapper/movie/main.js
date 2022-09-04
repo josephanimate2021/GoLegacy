@@ -97,6 +97,21 @@ module.exports = {
 			buffer.indexOf("]]></title>")
 		).toString().trim();
 
+		// tag
+		const tag = buffer.slice(
+			buffer.indexOf("<tag>") + 14,
+			buffer.indexOf("]]></tag>")
+		).toString().trim();
+		var tagDetect;
+		if (tag == '') tagDetect = "none";
+		else tagDetect = tag;
+
+		// description
+		const desc = buffer.slice(
+			buffer.indexOf("<desc>") + 15,
+			buffer.indexOf("]]></desc>")
+		).toString().trim();
+
 		// get the duration string
 		const durBeg = buffer.indexOf('duration="') + 10;
 		const duration = Number.parseFloat(buffer.slice(
@@ -106,6 +121,16 @@ module.exports = {
 		const min = ('' + ~~(duration / 60)).padStart(2, '0');
 		const sec = ('' + ~~(duration % 60)).padStart(2, '0');
 		const durationStr = `${min}:${sec}`;
+
+		// get the video width
+		const wideBeg = buffer.indexOf('isWide="') + 8;
+		const isWide = Number.parseFloat(buffer.slice(
+			wideBeg,
+			buffer.indexOf('"', wideBeg)
+		).toString().trim());
+		var res;
+		if (isWide == "1") res = "16:9";
+		else res = "14:9";
 
 		let count = 0;
 		if (getSc) { // get the scene count
@@ -121,6 +146,10 @@ module.exports = {
 			durationString: durationStr,
 			duration: duration,
 			sceneCount: count,
+			wide: isWide,
+			desc: desc,
+			res: res,
+			tag: tagDetect,
 			title: title,
 			id: mId,
 		};
