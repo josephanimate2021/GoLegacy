@@ -38,7 +38,7 @@ function hideImporter() {
 	importerVisible = false;
 	importer.hide();
 }
-function initPreviewPlayer(dataXmlStr, startFrame, containsChapter, themeList) {
+function initPreviewPlayer(dataXmlStr, startFrame) {
 	movieDataXmlStr = dataXmlStr;
 	filmXmlStr = dataXmlStr.split("<filmxml>")[1].split("</filmxml>")[0];
 	hideImporter(); // hide importer before previewing
@@ -232,6 +232,7 @@ class ImporterFile {
 					studio[0].importerAddAsset(this.type, this.id);
 					break;
 				} case "cancel": {
+					studio[0].importerStatus("clear");
 					this.el.fadeOut(() => this.el.remove());
 					break;
 				}
@@ -286,21 +287,20 @@ class ImporterFile {
 					studio[0].importerStatus("done");
 					studio[0].importerUploadComplete(importType, d.data.file, d.data);
 
-					// update html for images
-					if (this.subtype == 0) {
-						if (this.ext != "swf") 
-							this.el.find("img").attr("src", `/assets/${d.data.file}`);
-						// change the subtypes to an add to scene button
-						this.el.find(".import_as").html(`
-							<a href='#' action='add-to-scene'>Add to scene</a>
-							<a href="#" action="cancel">Close</a>
-						`.trim());
-						return;
-					}
+					
+					if (this.ext != "swf" && this.ext != "mp3" && this.ext != "mp4") this.el.find("img").attr("src", `/assets/${d.data.file}`);
+					// change the subtypes to an add to scene button
+					this.el.find(".import_as").html(`
+						<a href='#' action='add-to-scene'>Add to scene</a>
+						<a href="#" action="cancel">Close</a>
+					`.trim());
+					return;
 				} else alert("Error importing asset.");
 				// remove element
 				this.el.fadeOut(() => this.el.remove());
-			})
-			.catch(e => console.error("Import failed. Error:", e))
+			}).catch(e => {
+				studio[0].importerStatus("clear");
+				console.error("Import failed. Error:", e);
+			});
 	}
 }
