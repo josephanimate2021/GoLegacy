@@ -49,12 +49,8 @@ module.exports = async function (req, res, url) {
 			const path = req.files.import.filepath, buffer = fs.readFileSync(path);
 			const id = fUtil.generateId();
 			try {
-				var beg = buffer.lastIndexOf("<thumb>");
-				var end = buffer.lastIndexOf("</thumb>");
-				if (beg > -1 && end > -1) {
-					var sub = Buffer.from(buffer.subarray(beg + 7, end).toString(), "base64");
-					fs.writeFileSync(`${folder}/${id}.png`, sub);
-				}
+				const thumbBuffer = Buffer.from(fs.readFileSync(`${__dirname}/../${process.env.THUMB_BASE_URL}/257677977.jpg`), "base64");
+				fs.writeFileSync(`${folder}/${id}.png`, thumbBuffer);
 				fs.writeFileSync(`${folder}/${id}.xml`, buffer);
 				const url = `/go_full?movieId=${id}`;
 				fs.unlinkSync(path);
@@ -70,12 +66,8 @@ module.exports = async function (req, res, url) {
 			const path = req.files.import.filepath, buffer = fs.readFileSync(path);
 			const id = fUtil.generateId();
 			try {
-				var beg = buffer.lastIndexOf("<thumb>");
-				var end = buffer.lastIndexOf("</thumb>");
-				if (beg > -1 && end > -1) {
-					var sub = Buffer.from(buffer.subarray(beg + 7, end).toString(), "base64");
-					fs.writeFileSync(`${savedFolder}/${id}.png`, sub);
-				}
+				const thumbBuffer = Buffer.from(fs.readFileSync(`${__dirname}/../${process.env.THUMB_BASE_URL}/257677977.jpg`), "base64");
+				fs.writeFileSync(`${savedFolder}/${id}.png`, thumbBuffer);
 				fs.writeFileSync(`${savedFolder}/${id}.xml`, buffer);
 				Movie.meta(id, true).then(meta => {
 					const db = DB.get();
