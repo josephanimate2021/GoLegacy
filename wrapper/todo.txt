@@ -1,2 +1,2 @@
 - add login/signup pages in the frontend
-- fix watermarks in the backend
+- fix watermarks in the backend in the v2 branch
