@@ -3,7 +3,9 @@
  */
 // modules
 const fs = require("fs");
+const path = require("path");
 const fUtil = require("../fileUtil");
+const folder = `${__dirname}/../${process.env.MOVIES_FOLDER}`;
 // stuff
 const Char = require("./main");
 const Movie = require("../movie/main");
@@ -45,9 +47,15 @@ module.exports = async function (req, res, url) {
 			const path = req.files.import.filepath, buffer = fs.readFileSync(path);
 			const id = fUtil.generateId();
 			try {
-				fs.writeFileSync(process.env.MOVIES_FOLDER + `${id}.xml`, buffer);
-				Movie.createThumb(buffer, id);
+				var beg = buffer.lastIndexOf("<thumb>");
+				var end = buffer.lastIndexOf("</thumb>");
+				if (beg > -1 && end > -1) {
+					var sub = Buffer.from(buffer.subarray(beg + 7, end).toString(), "base64");
+					fs.writeFileSync(`${folder}/${id}.png`, sub);
+				}
+				fs.writeFileSync(`${folder}/${id}.xml`, buffer);
 				const url = `/go_full?movieId=${id}`;
+				fs.unlinkSync(path);
 				res.statusCode = 302;
 				res.setHeader("Location", url);
 				res.end();

@@ -26,18 +26,6 @@ module.exports = {
 		if (match) match.forEach(filename => 
 			fs.unlinkSync(path.join(mFolder, filename)));
 	},
-	/**
-	 * Creates a thumb for an uploaded movie using the thumb data inside the buffer.
-	 * @returns {buffer}
-	 */
-	async createThumb(buffer, id) {
-		var beg = buffer.lastIndexOf("<thumb>");
-		var end = buffer.lastIndexOf("</thumb>");
-		if (beg > -1 && end > -1) {
-			var sub = Buffer.from(buffer.subarray(beg + 7, end).toString(), "base64");
-			fs.writeFileSync(`${mFolder}/${id}.png`, sub);
-		}
-	},
 
 	/**
 	 * Not what you think it is.
