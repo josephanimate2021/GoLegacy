@@ -34,7 +34,7 @@ module.exports = async function (req, res, url) {
 				}));
 			} catch (err) {
 				res.statusCode = 404;
-				res.end("{'status':'error'}");
+				res.end(JSON.stringify({ status: "error" }));
 			}
 			break;
 		} case "/api_v2/asset/update/": { // we're updating it
