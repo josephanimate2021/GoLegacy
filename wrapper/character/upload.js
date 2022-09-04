@@ -46,7 +46,7 @@ module.exports = async function (req, res, url) {
 			const id = fUtil.generateId();
 			try {
 				fs.writeFileSync(process.env.MOVIES_FOLDER + `${id}.xml`, buffer);
-				Movie.createThumb(id);
+				Movie.createThumb(buffer, id);
 				const url = `/go_full?movieId=${id}`;
 				res.statusCode = 302;
 				res.setHeader("Location", url);
