@@ -66,7 +66,6 @@ module.exports = async function (req, res, url) {
 				res.statusCode = 500;
 				res.end();
 			}
-		}
 		} case "/upload_starter": {
 			const path = req.files.import.filepath, buffer = fs.readFileSync(path);
 			const id = fUtil.generateId();
