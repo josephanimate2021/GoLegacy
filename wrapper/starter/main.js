@@ -46,7 +46,11 @@ module.exports = {
 							title: mMeta.title,
 							sceneCount: mMeta.sceneCount,
 							tags: "",
-							file: `${mId}.xml`
+							file: `${mId}.xml`,
+							assetId: mId,
+							share: {
+								type: "none"
+							}
 						});
 						DB.save(db);
 						resolve(mId);
