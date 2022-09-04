@@ -22,6 +22,7 @@ module.exports = async function (req, res, url) {
 	const thumb = Buffer.from(req.body.thumbnail, "base64");
 
 	try {
+		console.log(req.body);
 		const mId = await Starter.save(body, thumb, req.body.movieId)
 		res.end("0" + mId);
 	} catch (err) {

@@ -28,6 +28,9 @@ const Stp = require("./static/page");
 const mvd = require("./movie/delete");
 const mvl = require("./movie/load");
 const mvL = require("./movie/list");
+const Mvd = require("./movie/watermark");
+const Mvl = require("./asset/watermark");
+const MvL = require("./watermark/load");
 const mvm = require("./movie/meta");
 const mvr = require("./movie/redirect");
 const mvR = require("./movie/repair")
@@ -42,6 +45,9 @@ const wal = require("./waveform/load");
 const was = require("./waveform/save");
 const functions = [
 	asd,
+	Mvd,
+	Mvl,
+	MvL,
 	svt,
 	asa,
 	asl,

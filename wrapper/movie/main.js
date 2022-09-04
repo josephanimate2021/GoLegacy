@@ -8,6 +8,7 @@ const path = require("path");
 // vars
 const mFolder = path.join(__dirname, "../", process.env.MOVIES_FOLDER);
 const folder = path.join(__dirname, "../", process.env.SAVED_FOLDER);
+const aFolder = path.join(__dirname, "../", process.env.ASSET_FOLDER);
 const base = Buffer.alloc(1, 0);
 // stuff
 const fUtil = require("../fileUtil");
@@ -88,7 +89,7 @@ module.exports = {
 	async meta(mId, getSc = false) {
 		var filepath;
 		if (!getSc) filepath = path.join(mFolder, `${mId}.xml`);
-		else filepath = path.join(folder, `${mId}.xml`);
+		else filepath = `${__dirname}/../${process.env.SAVED_FOLDER}/${mId}.xml`
 		const buffer = fs.readFileSync(filepath);
 
 		// title
@@ -141,6 +142,16 @@ module.exports = {
 			}
 		}
 
+        var watermarks;
+		const wtrTxt = `${aFolder}/${mId}-watermark.xml`;
+		if (!fs.existsSync(wtrTxt)) watermarks = "No Logo";
+		else {
+			const wBuffer = fs.readFileSync(wtrTxt);
+			const begWtr = wBuffer.indexOf("<watermark>");
+			const endWtr = wBuffer.indexOf("</watermark>");
+			watermarks = wBuffer.subarray(begWtr, endWtr).toString();
+		}
+
 		return {
 			date: fs.statSync(filepath).mtime,
 			durationString: durationStr,
@@ -149,6 +160,7 @@ module.exports = {
 			wide: isWide,
 			desc: desc,
 			res: res,
+			watermark: watermarks,
 			tag: tagDetect,
 			title: title,
 			id: mId,

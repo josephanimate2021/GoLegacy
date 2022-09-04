@@ -22,40 +22,42 @@ module.exports = {
 	 * @param {string} mId 
 	 * @returns {Promise<string>}
 	 */
-	async save(body, thumb, mId) {
-		return new Promise((resolve, reject) => {
-			mId ||= fUtil.generateId();
+	async save(body, thumb, mId = false) {
+		return new Promise((resolve) => {
+			var id;
+			if (!mId) id = fUtil.generateId();
+			else id = mId;
 
 			// save the thumbnail
-			fs.writeFileSync(path.join(folder, `${mId}.png`), thumb);
+			fs.writeFileSync(path.join(folder, `${id}.png`), thumb);
 			// extract the movie xml and save it
 			const zip = nodezip.unzip(body);
 			const xmlStream = zip["movie.xml"].toReadStream();
 
-			let writeStream = fs.createWriteStream(path.join(folder, `${mId}.xml`));
+			let writeStream = fs.createWriteStream(path.join(folder, `${id}.xml`));
 			xmlStream.on("data", b => writeStream.write(b));
 			xmlStream.on("end", async () => {
 				writeStream.close();
 
 				// save starter info
-				meta(mId, true)
+				meta(id, true)
 					.then(mMeta => {
 						const db = DB.get();
 						db.assets.push({
-							id: mId,
-							enc_asset_id: mId,
+							id: id,
+							enc_asset_id: id,
 							type: "movie",
 							title: mMeta.title,
 							sceneCount: mMeta.sceneCount,
 							tags: "",
-							file: `${mId}.xml`,
-							assetId: mId,
+							file: `${id}.xml`,
+							assetId: id,
 							share: {
 								type: "none"
 							}
 						});
 						DB.save(db);
-						resolve(mId);
+						resolve(id);
 					});
 			});
 		});

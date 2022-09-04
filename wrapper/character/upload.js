@@ -5,6 +5,7 @@
 const fs = require("fs");
 const path = require("path");
 const fUtil = require("../fileUtil");
+const waterFolder = `${__dirname}/../${process.env.CUSTOM_WATERMARKS_FOLDER}`;
 const folder = `${__dirname}/../${process.env.MOVIES_FOLDER}`;
 const savedFolder = `${__dirname}/../${process.env.SAVED_FOLDER}`;
 const database = require("../data/database"), DB = new database();
@@ -62,6 +63,7 @@ module.exports = async function (req, res, url) {
 				res.statusCode = 500;
 				res.end();
 			}
+			return true;
 		} case "/upload_starter": {
 			const path = req.files.import.filepath, buffer = fs.readFileSync(path);
 			const id = fUtil.generateId();
@@ -95,6 +97,25 @@ module.exports = async function (req, res, url) {
 				res.statusCode = 500;
 				res.end();
 			}
+			return true;
+		} case "/upload_watermark": {
+			const path = req.files.import.filepath, buffer = fs.readFileSync(path);
+			const id = fUtil.generateId();
+			try {
+				const name = req.files.import.originalFilename;
+				const dot = name.lastIndexOf(".");
+				const ext = name.substr(dot + 1);
+				fs.writeFileSync(`${waterFolder}/${id}.${ext}`, buffer);
+				fs.unlinkSync(path);
+				res.statusCode = 302;
+				res.setHeader("Location", "/");
+				res.end();
+			} catch (e) {
+				console.error("Error uploading watermark:", e);
+				res.statusCode = 500;
+				res.end();
+			}
+			return true;
 		}
 	}			
 }

@@ -7,6 +7,7 @@ const env = Object.assign(process.env, require("./env"), require("./config"));
 const fs = require("fs");
 const path = require("path");
 // vars
+const custo = path.join(__dirname, env.CUSTOM_WATERMARKS_FOLDER);
 const movie = path.join(__dirname, env.MOVIES_FOLDER);
 const asset = path.join(__dirname, env.ASSET_FOLDER);
 const cache = path.join(__dirname, env.CACHÉ_FOLDER);
@@ -18,6 +19,7 @@ const saved = path.join(__dirname, env.SAVED_FOLDER);
 // create directories if they're missing
 if (!fs.existsSync(movie)) fs.mkdirSync(movie);
 if (!fs.existsSync(asset)) fs.mkdirSync(asset);
+if (!fs.existsSync(custo)) fs.mkdirSync(custo);
 if (!fs.existsSync(cache)) fs.mkdirSync(cache);
 if (!fs.existsSync(saved)) fs.mkdirSync(saved);
 // start server
