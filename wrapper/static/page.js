@@ -86,7 +86,7 @@ module.exports = async function (req, res, url) {
 					type: "application/x-shockwave-flash",
 					id: "char_creator",
 					width: '100%', 
-					height: '600', 
+					height: '1000', 
 					class: "char_object"
 				},
 				params: {
