@@ -15,7 +15,6 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 :: Make sure we're starting in the correct folder, and that it worked (otherwise things would go horribly wrong)
 pushd "%~dp0"
 if !errorlevel! NEQ 0 goto error_location
-if not exist utilities ( goto error_location )
 if not exist wrapper ( goto error_location )
 if not exist server ( goto error_location )
 goto noerror_location
