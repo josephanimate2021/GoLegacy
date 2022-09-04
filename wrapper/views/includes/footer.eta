@@ -1,10 +1,9 @@
-<footer>
-	<nav id="foot-left">
-		<a>v<%= it.env.WRAPPER_VER %></a>
-		<a href="/settings">Settings</a>
-		<a href="https://github.com/Wrapper-Offline/Wrapper-Offline/wiki">FAQ</a>
-		<a href="https://discord.gg/yhGAetN">Discord</a>
-	</nav>
-
-	<nav id="foot-right"></nav>
-</footer>
+<form enctype='multipart/form-data' action='/upload_starter' method='post'>
+        <input id='file2' type="file" onchange="this.form.submit()" name='import' accept=".xml" />
+</form>
+<form enctype='multipart/form-data' action='/upload_watermark' method='post'>
+	<input id='file3' type="file" onchange="this.form.submit()" name='import' accept=".png,.jpg,.swf" />
+</form>
+<form enctype='multipart/form-data' action='/upload_movie' method='post'>
+	<input id='file' type="file" onchange="this.form.submit()" name='import' accept=".xml" />
+</form>
