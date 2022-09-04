@@ -6,6 +6,8 @@ const fs = require("fs");
 const path = require("path");
 const fUtil = require("../fileUtil");
 const folder = `${__dirname}/../${process.env.MOVIES_FOLDER}`;
+const savedFolder = `${__dirname}/../${process.env.SAVED_FOLDER}`;
+const database = require("../data/database"), DB = new database();
 // stuff
 const Char = require("./main");
 const Movie = require("../movie/main");
@@ -58,6 +60,44 @@ module.exports = async function (req, res, url) {
 				fs.unlinkSync(path);
 				res.statusCode = 302;
 				res.setHeader("Location", url);
+				res.end();
+			} catch (e) {
+				console.error("Error uploading movie:", e);
+				res.statusCode = 500;
+				res.end();
+			}
+		}
+		} case "/upload_starter": {
+			const path = req.files.import.filepath, buffer = fs.readFileSync(path);
+			const id = fUtil.generateId();
+			try {
+				var beg = buffer.lastIndexOf("<thumb>");
+				var end = buffer.lastIndexOf("</thumb>");
+				if (beg > -1 && end > -1) {
+					var sub = Buffer.from(buffer.subarray(beg + 7, end).toString(), "base64");
+					fs.writeFileSync(`${savedFolder}/${id}.png`, sub);
+				}
+				fs.writeFileSync(`${savedFolder}/${id}.xml`, buffer);
+				Movie.meta(id).then(meta => {
+					const db = DB.get();
+					db.assets.push({
+						id: id,
+						enc_asset_id: id,
+						type: "movie",
+						title: meta.title,
+						sceneCount: meta.sceneCount,
+						tags: "",
+						file: `${id}.xml`,
+						assetId: id,
+						share: {
+							type: "none"
+						}
+					});
+					DB.save(db);
+				});
+				fs.unlinkSync(path);
+				res.statusCode = 302;
+				res.setHeader("Location", "/");
 				res.end();
 			} catch (e) {
 				console.error("Error uploading movie:", e);
