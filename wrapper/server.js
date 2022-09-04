@@ -33,6 +33,7 @@ const mvr = require("./movie/redirect");
 const mvR = require("./movie/repair")
 const mvs = require("./movie/save");
 const mvt = require("./movie/thmb");
+const svt = require("./starter/thmb");
 const thl = require("./theme/load");
 const thL = require("./theme/list");
 const tsv = require("./tts/voices");
@@ -41,6 +42,7 @@ const wal = require("./waveform/load");
 const was = require("./waveform/save");
 const functions = [
 	asd,
+	svt,
 	asa,
 	asl,
 	asL,

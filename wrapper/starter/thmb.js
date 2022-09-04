@@ -3,7 +3,7 @@
  * movie thumbnails
  */
 // stuff
-const Movie = require("./main");
+const Movie = require("../movie/main");
 
 /**
  * @param {import("http").IncomingMessage} req
@@ -12,12 +12,12 @@ const Movie = require("./main");
  * @returns {boolean}
  */
 module.exports = async function (req, res) {
-	const match = req.url.match(/\/file\/movie\/thumb\/([^/]+)$/);
+	const match = req.url.match(/\/file\/starter\/thumb\/([^/]+)$/);
 	if (!match) return;
 	const mId = match[1];
 
 	try {
-		const mThmb = await Movie.thumb(mId);
+		const mThmb = await Movie.mThumb(mId);
 		res.setHeader("Content-Type", "image/png");
 		res.end(mThmb);
 	} catch (err) {

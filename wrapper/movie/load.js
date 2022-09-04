@@ -4,6 +4,7 @@
  */
 // stuff
 const Movie = require("./main");
+const starter = require("../starter/main");
 
 /**
  * @param {import("http").IncomingMessage} req
@@ -31,15 +32,9 @@ module.exports = async function (req, res, url) {
 			break;
 		} default: return;
 	}
-
-	try {
-		const buf = await Movie.load(mId, isGet);
-		res.setHeader("Content-Type", "application/zip");
-		res.end(buf);
-	} catch (err) {
-		console.error(err);
-		res.statusCode = 404;
-		res.end();
-	}
+	res.setHeader("Content-Type", "application/zip");
+	await Movie.load(mId, isGet).then(buf => res.end(buf)).catch(e => { // try starter
+		starter.load(mId).then(buf => res.end(buf)).catch(e => console.error(e))
+	});
 	return true;
 }
