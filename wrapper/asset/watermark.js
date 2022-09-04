@@ -5,9 +5,9 @@ async function listAssets() {
 	// premade watermarks
 	var xmlString = `
 	<?xml encoding="UTF-8"?><watermarks><watermark id="174tbqdo0cs6" thumbnail="${
-	process.env.WATERMARKS_FOLDER}/Go4Schools.png"/><preview>Go4Schools.png</preview><watermark id="82tkgqdefbw6" thumbnail="${
-	process.env.WATERMARKS_FOLDER}/freeTrial.png"/><preview>freeTrial.png</preview><watermark id="52ht3dd60csd" thumbnail="${
-	process.env.WATERMARKS_FOLDER}/GoMakeYourOwn.png"/><preview>GoMakeYourOwn.png</preview>${
+	process.env.WATERMARKS_FOLDER}/Go4Schools.png"/><watermark id="82tkgqdefbw6" thumbnail="${
+	process.env.WATERMARKS_FOLDER}/freeTrial.png"/><watermark id="52ht3dd60csd" thumbnail="${
+	process.env.WATERMARKS_FOLDER}/GoMakeYourOwn.png"/>${
 	// custom watermarks
 	files.map(v => `<watermark id="${v.id.slice(0, -4)}" thumbnail="${
 		  process.env.CUSTOM_WATERMARKS_FOLDER}/${v.id}"/><preview>${v.id}</preview>`).join("")}</watermarks>`;
