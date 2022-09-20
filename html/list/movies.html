@@ -1,5 +1,10 @@
 <html>
-	<body><header>
+	<head>
+		<title id="titleToggle">GoLegacy - Video List</title>
+		<script src="/js/jquery.js"></script>
+		<link rel="stylesheet" href="/css/reset.css" />
+		<link rel="stylesheet" href="/css/styles-3.css" />
+	<body><div class="header">
 		<div>
 			<div>
 				<span>GoLegacy Version VERSIÖN</span>
@@ -58,8 +63,8 @@
 			</div>
 		</div>
 		<div class="warning">NEWS</div>
-	</header>
-	<table>
+	</div>
+	<table id="video_list">
 		<thead>
 			<tr>
 				<td></td>
@@ -76,7 +81,115 @@
 				</td>
 			</tr>
 		</tfoot>
-	</table>
+	</table><div id="videomaker" style="display:none" class="container">
+		<header>
+			<h1>Select A Theme</h1>
+		</header>
+
+
+		<section class="thumbnail-grid">
+			
+			<ul><!-- names are cc theme ids and values are lvm ids for a different redirect function and some use with jquery. -->
+				<li name="family" value="custom">
+					<a href="#" title="Comedy World" onclick="themeRedirect('Comedy World')">
+						<figure>
+							<img src="https://raw.githubusercontent.com/Wrapper-Offline/Wrapper-Offline/main/wrapper/pages/img/themes/custom.jpg" alt="Comedy World" />
+							<figcaption>
+								<p class="description">Comedy World
+									<a class="price" href="javascript:;">Create</span>
+								</p>
+							</figcaption>
+						</figure>
+					</a>
+				</li>
+				<li>
+					<a href="#" title="View product details">
+						<figure>
+							<img src="images/helvetica_thumb.jpg" alt="helvetica book" />
+							<figcaption>
+								<p class="description">Helvetica Lars Muller Publishers 
+									<span class="price">$25.00</span>
+								</p>
+							</figcaption>
+						</figure>
+					</a>
+				</li>
+				<li>
+					<a href="#" title="View product details">
+						<figure>
+							<img src="images/helvetica_thumb.jpg" alt="helvetica book" />
+							<figcaption>
+								<p class="description">Helvetica Lars Muller Publishers 
+									<span class="price">$25.00</span>
+								</p>
+							</figcaption>
+						</figure>
+					</a>
+				</li>
+				<li>
+					<a href="#" title="View product details">
+						<figure>
+							<img src="images/blockitecture_thumb.jpg" alt="Blockitecture" />
+							<figcaption>
+								<p class="description">Blockitecture 
+									<span class="price">$25.00</span>
+								</p>
+							</figcaption>
+						</figure>
+					</a>
+				</li>
+				<li>
+					<a href="#" title="View product details">
+						<figure>
+							<img src="images/cube_thumb.jpg" alt="boskee cube" />
+							<figcaption>
+								<p class="description">Boskke Cube Boskke 
+									<span class="price">From $24.95</span>
+								</p>
+							</figcaption>
+						</figure>
+					</a>
+				</li>
+				<li>
+					<a href="#" title="View product details">
+						<figure>
+							<img src="images/birds_thumb.jpg" alt="cast iron birds" />
+							<figcaption>
+								<p class="description">Cast Iron Animals Kamasada 
+									<span class="price">$120.00</span>
+								</p>
+							</figcaption>
+						</figure>
+					</a>
+				</li>
+				<li>
+					<a href="#" title="View product details">
+						<figure>
+							<img src="images/lids_thumb.jpg" alt="hasami lids" />
+							<figcaption>
+								<p class="description">Oak Tray Hasami Porcelain 
+									<span class="price">$16.00</span>
+								</p>
+							</figcaption>
+						</figure>
+					</a>
+				</li>
+				<li>
+					<a href="#" title="View product details">
+						<figure>
+							<img src="images/truck_thumb.jpg" alt="truck nest book" />
+							<figcaption>
+								<p class="description">Truck Nest Truck Furniture 
+									<span class="price">$44.00</span>
+								</p>
+							</figcaption>
+						</figure>
+					</a>
+				</li>
+			</ul>
+
+		</section>
+	</div>
 	<form enctype='multipart/form-data' action='/upload_starter' method='post'>
 		<input id='file2' type="file" onchange="this.form.submit()" name='import' accept=".xml" />
 	</form>
@@ -127,6 +240,20 @@
 		        xhttp.send();
                         document.getElementById(`${id}`).style.display = "none";
 		}
+		function themeRedirect(title) {
+			var tId, themeVar;
+			switch (title) {
+				case "Comedy World": {
+					themeVar = $("li[name='family']");
+					tId = themeVar.val();
+					break;
+				} default: {
+					tId = "infographics";
+					break;
+				}
+			}
+			location.href = `/go_full?tray=${tId}`;
+		}
 	</script>
 	<style>
 		html {
@@ -145,13 +272,13 @@
 			position: relative;
 		}
 
-		header {
+		.header {
 			position: sticky;
 			top: 0;
 			width: 100%;
 		}
 
-		header>:nth-child(1) {
+		.header>:nth-child(1) {
 			align-content: center;
 			background-color: #1e1e1e;
 			display: inline-block;
@@ -161,23 +288,23 @@
 			width: 100%;
 		}
 
-		header>:nth-child(1)>:nth-child(1) {
+		.header>:nth-child(1)>:nth-child(1) {
 			float: left;
 		}
 
-		header>:nth-child(1)>:nth-child(1)>:nth-child(1)>* {
+		.header>:nth-child(1)>:nth-child(1)>:nth-child(1)>* {
 			margin-left: 10px;
 			margin-top: 7px;
 			height: 30px;
 		}
 
-		header>:nth-child(1)>:nth-child(1)>:nth-child(2) {
+		.header>:nth-child(1)>:nth-child(1)>:nth-child(2) {
 			color: #666;
 			padding-left: 4px;
 			font-weight: 700;
 		}
 
-		header>:nth-child(1)>:nth-child(2) {
+		.header>:nth-child(1)>:nth-child(2) {
 			margin-right: 20px;
 			clear: both;
 		}
