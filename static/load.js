@@ -28,8 +28,8 @@ module.exports = function (req, res, url) {
 					if (t.contentReplace) {
 						content = fs.readFileSync(path, "utf8");
 						content = content.replace(/VERSIÖN/g, pjson.versionStr);
-						content = content.replace(/NEWS/g, "Welcome to GoLegacy! feel free to do whatever you like here.");
-						content = content.replace(/BUTTON/g, `<a class="button_big" href="/go_full">MAKE A VIDEO</a>`);
+						content = content.replace(/NEWS/g, "GoLegacy now has business themes! Feel free to flex around.");
+						content = content.replace(/BUTTON/g, `<a id="button" class="button_big" onclick="videomaker("lvm")">MAKE A VIDEO</a>`);
 						res.end(content);
 					} else fs.createReadStream(path).pipe(res);
 				} else throw null;
